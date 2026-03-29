@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Könyvek — First Principle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #100C08;
+            color: #FFFFF0;
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(16, 12, 8, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid #302a22;
+        }
+
+        .nav-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo span {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: #b8a88a;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #FFFFF0;
+        }
+
+        .nav-links a.active {
+            color: #FF5800;
+        }
+
+        /* Main */
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 140px 24px 120px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 48px;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+        }
+
+        .intro {
+            color: #b8a88a;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 64px;
+            max-width: 560px;
+        }
+
+        .intro .highlight {
+            color: #FF5800;
+            font-weight: 500;
+        }
+
+        /* Category */
+        .category {
+            margin-bottom: 48px;
+        }
+
+        .category-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #7a6d5c;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #302a22;
+        }
+
+        .book-list {
+            list-style: none;
+        }
+
+        .book-list li {
+            padding: 10px 0;
+        }
+
+        .book-list li + li {
+            border-top: 1px solid rgba(48, 42, 34, 0.4);
+        }
+
+        .book-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #FFFFF0;
+            transition: color 0.2s;
+        }
+
+        .book-title:hover {
+            color: #FF5800;
+        }
+
+        .book-title.recommended {
+            color: #FF5800;
+        }
+
+        .book-title.recommended:hover {
+            color: #ff7a33;
+        }
+
+        .book-author {
+            color: #7a6d5c;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+
+        .book-subtitle {
+            color: #b8a88a;
+            font-size: 13px;
+            margin-top: 2px;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 48px;
+            font-size: 13px;
+            color: #7a6d5c;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #FF5800;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #302a22;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .footer-inner p {
+            font-size: 13px;
+            color: #7a6d5c;
+        }
+
+        .footer-inner a {
+            color: #b8a88a;
+            transition: color 0.2s;
+        }
+
+        .footer-inner a:hover {
+            color: #FF5800;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            main {
+                padding: 120px 20px 80px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <svg height="24" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+                    <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+                </svg>
+                <span>First Principle</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Epizódok</a>
+                <a href="#" class="active">Könyvek</a>
+                <a href="about.html">Rólunk</a>
+                <a href="shop.html">Shop</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <h1>Könyvek.</h1>
+        <p class="intro">
+            Könyvek, amik formálták a gondolkodásunkat. A <span class="highlight">narancssárgával</span> jelöltek különösen ajánlottak.
+        </p>
+
+        <div class="legend">
+            <span class="legend-dot"></span>
+            <span>Különösen ajánlott</span>
+        </div>
+
+        <!-- Gondolkodás & Első Elvek -->
+        <div class="category">
+            <div class="category-title">Gondolkodás & Első Elvek</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title recommended">Zero to One</a>
+                    <span class="book-author">— Peter Thiel</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title recommended">The Beginning of Infinity</a>
+                    <span class="book-author">— David Deutsch</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title recommended">Thinking, Fast and Slow</a>
+                    <span class="book-author">— Daniel Kahneman</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Poor Charlie's Almanack</a>
+                    <span class="book-author">— Charlie Munger</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Vezetés & Szervezetépítés -->
+        <div class="category">
+            <div class="category-title">Vezetés & Szervezetépítés</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title recommended">High Output Management</a>
+                    <span class="book-author">— Andy Grove</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Hard Thing About Hard Things</a>
+                    <span class="book-author">— Ben Horowitz</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">An Elegant Puzzle</a>
+                    <span class="book-author">— Will Larson</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Measure What Matters</a>
+                    <span class="book-author">— John Doerr</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Good to Great</a>
+                    <span class="book-author">— Jim Collins</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Technológia & AI -->
+        <div class="category">
+            <div class="category-title">Technológia & AI</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title recommended">The Innovator's Dilemma</a>
+                    <span class="book-author">— Clayton Christensen</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Superintelligence</a>
+                    <span class="book-author">— Nick Bostrom</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Life 3.0</a>
+                    <span class="book-author">— Max Tegmark</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Age of AI</a>
+                    <span class="book-author">— Kissinger, Schmidt, Huttenlocher</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Pénzügyek & Gazdaság -->
+        <div class="category">
+            <div class="category-title">Pénzügyek & Gazdaság</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title recommended">The Intelligent Investor</a>
+                    <span class="book-author">— Benjamin Graham</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Sapiens</a>
+                    <span class="book-author">— Yuval Noah Harari</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title recommended">Principles</a>
+                    <span class="book-author">— Ray Dalio</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Capital in the Twenty-First Century</a>
+                    <span class="book-author">— Thomas Piketty</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Psychology of Money</a>
+                    <span class="book-author">— Morgan Housel</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Magyarország & Közép-Európa -->
+        <div class="category">
+            <div class="category-title">Magyarország & Közép-Európa</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title recommended">Why Nations Fail</a>
+                    <span class="book-author">— Acemoglu & Robinson</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Road to Unfreedom</a>
+                    <span class="book-author">— Timothy Snyder</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Bloodlands</a>
+                    <span class="book-author">— Timothy Snyder</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Light That Failed</a>
+                    <span class="book-author">— Krastev & Holmes</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Longevity & Egészség -->
+        <div class="category">
+            <div class="category-title">Longevity & Egészség</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title recommended">Outlive</a>
+                    <span class="book-author">— Peter Attia</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Lifespan</a>
+                    <span class="book-author">— David Sinclair</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Why We Sleep</a>
+                    <span class="book-author">— Matthew Walker</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Atomic Habits</a>
+                    <span class="book-author">— James Clear</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Társadalom & Jövőkép -->
+        <div class="category">
+            <div class="category-title">Társadalom & Jövőkép</div>
+            <ul class="book-list">
+                <li>
+                    <a href="#" class="book-title">Bowling Alone</a>
+                    <span class="book-author">— Robert Putnam</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title recommended">The Revolt of the Public</a>
+                    <span class="book-author">— Martin Gurri</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Sovereign Individual</a>
+                    <span class="book-author">— Davidson & Rees-Mogg</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">The Lessons of History</a>
+                    <span class="book-author">— Will & Ariel Durant</span>
+                </li>
+                <li>
+                    <a href="#" class="book-title">Brave New World</a>
+                    <span class="book-author">— Aldous Huxley</span>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <p>&copy; 2026 First Principle Podcast. Minden jog fenntartva.</p>
+        </div>
+    </footer>
+</body>
+</html>

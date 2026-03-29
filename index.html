@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>first principle. podcast</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --fp-orange: #FF5800;
+    --fp-orange-dim: rgba(255, 88, 0, 0.12);
+    --fp-orange-glow: rgba(255, 88, 0, 0.06);
+    --fp-cream: #FFFFF0;
+    --fp-cream-dark: #F5F0E0;
+    --fp-dark: #100C08;
+    --fp-dark-elevated: #1a1612;
+    --fp-dark-card: #211d18;
+    --fp-dark-border: #302a22;
+    --fp-text: #FFFFF0;
+    --fp-text-secondary: #b8a88a;
+    --fp-text-tertiary: #7a6d5c;
+    --fp-purple: #2d1854;
+    --green: #4dbe6e;
+    --blue: #4d8be5;
+    --teal: #14b8a6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--fp-dark);
+    color: var(--fp-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .serif { font-family: 'Playfair Display', Georgia, serif; }
+  .serif-italic { font-family: 'Playfair Display', Georgia, serif; font-style: italic; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(16, 12, 8, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--fp-dark-border);
+    padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-mark { height: 28px; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    color: var(--fp-text-secondary); text-decoration: none;
+    font-size: 14px; font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--fp-text); }
+  .nav-cta {
+    background: var(--fp-orange) !important; color: var(--fp-cream) !important;
+    padding: 8px 20px; border-radius: 8px; font-weight: 600 !important;
+    font-size: 13px !important; transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.9; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 120px 24px 80px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -300px; left: 50%;
+    transform: translateX(-50%); width: 1000px; height: 1000px;
+    background: radial-gradient(circle, var(--fp-orange-glow) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-logo-large {
+    margin-bottom: 40px;
+    opacity: 0.08;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: auto;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px; border-radius: 100px;
+    border: 1px solid var(--fp-dark-border); background: var(--fp-dark-elevated);
+    font-size: 13px; color: var(--fp-text-secondary); margin-bottom: 32px;
+    position: relative;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--fp-orange); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .hero-logo-center { width: 280px; margin-bottom: 32px; position: relative; }
+
+  .hero h1 {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 400; letter-spacing: 0.5px;
+    line-height: 1.6; margin-bottom: 24px;
+    color: var(--fp-text-secondary);
+    position: relative;
+  }
+  .hero h1 em {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    color: var(--fp-text); font-size: 1.1em;
+  }
+  .hero-tagline {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(32px, 5vw, 56px); font-weight: 400;
+    color: var(--fp-text); margin-bottom: 48px; position: relative;
+    line-height: 1.3; max-width: 700px;
+  }
+  .hero-tagline .fp-dot { color: var(--fp-orange); }
+
+  .hero-stats { display: flex; gap: 48px; margin-bottom: 48px; position: relative; }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-size: 32px; font-weight: 800;
+    font-family: 'JetBrains Mono', monospace; color: var(--fp-orange);
+  }
+  .hero-stat .label {
+    font-size: 11px; color: var(--fp-text-tertiary);
+    text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; position: relative; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; background: var(--fp-orange); color: var(--fp-cream);
+    border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,88,0,0.3); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; background: transparent; color: var(--fp-text);
+    border: 1px solid var(--fp-dark-border); border-radius: 10px;
+    text-decoration: none; font-weight: 600; font-size: 15px; transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--fp-text-secondary); background: var(--fp-dark-elevated); }
+
+  /* ===== SUBSCRIBE ROW ===== */
+  .subscribe-row {
+    display: flex; justify-content: center; gap: 32px; padding: 28px 24px;
+    border-top: 1px solid var(--fp-dark-border);
+    border-bottom: 1px solid var(--fp-dark-border);
+    background: var(--fp-dark-elevated);
+  }
+  .subscribe-item {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--fp-text-secondary); text-decoration: none;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.5px;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .subscribe-item:hover { color: var(--fp-orange); }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 96px 24px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--fp-orange); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+    letter-spacing: -0.5px; margin-bottom: 16px;
+  }
+  .section-title .fp-dot { color: var(--fp-orange); }
+  .section-desc {
+    font-size: 16px; color: var(--fp-text-secondary);
+    max-width: 560px; margin-bottom: 48px; line-height: 1.8;
+  }
+
+  /* ===== HOSTS ===== */
+  .hosts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .host-card {
+    background: var(--fp-dark-card); border: 1px solid var(--fp-dark-border);
+    border-radius: 16px; padding: 32px 20px; text-align: center; transition: all 0.3s;
+  }
+  .host-card:hover { border-color: var(--fp-orange); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+  .host-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--fp-orange-dim), var(--fp-dark-elevated));
+    border: 2px solid var(--fp-dark-border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; font-size: 22px; font-weight: 800; color: var(--fp-orange);
+    font-family: 'Playfair Display', serif;
+  }
+  .host-name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .host-role { font-size: 12px; color: var(--fp-orange); font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
+  .host-bio { font-size: 13px; color: var(--fp-text-secondary); line-height: 1.6; }
+  .host-tag {
+    display: inline-block; margin-top: 12px; padding: 4px 12px;
+    border-radius: 100px; font-size: 11px; font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid var(--fp-dark-border); color: var(--fp-text-tertiary);
+  }
+
+  /* ===== MANIFESTO ===== */
+  .manifesto {
+    background: var(--fp-dark-elevated); border-top: 1px solid var(--fp-dark-border);
+    border-bottom: 1px solid var(--fp-dark-border);
+  }
+  .manifesto-inner {
+    max-width: 800px; margin: 0 auto; text-align: center;
+  }
+  .manifesto-quote {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(22px, 3.5vw, 36px); font-weight: 400;
+    line-height: 1.6; color: var(--fp-text); margin-bottom: 24px;
+  }
+  .manifesto-quote .fp-dot { color: var(--fp-orange); }
+  .manifesto-attr { font-size: 13px; color: var(--fp-text-tertiary); letter-spacing: 1px; }
+
+  /* ===== FEATURED EPISODE ===== */
+  .featured-ep {
+    background: var(--fp-dark-card); border: 1px solid var(--fp-dark-border);
+    border-radius: 20px; padding: 48px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 48px;
+  }
+  .featured-ep-meta { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+  .ep-number { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fp-orange); font-weight: 600; }
+  .ep-date { font-size: 13px; color: var(--fp-text-tertiary); }
+  .ep-pill {
+    padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.5px; border: 1px solid;
+  }
+  .pill-ai { color: var(--blue); border-color: rgba(77,139,229,0.3); background: rgba(77,139,229,0.08); }
+  .pill-finance { color: #4dbe6e; border-color: rgba(77,190,110,0.3); background: rgba(77,190,110,0.08); }
+  .pill-leadership { color: #f59e0b; border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
+  .pill-longevity { color: #8b5cf6; border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.08); }
+  .pill-hungary { color: var(--fp-orange); border-color: rgba(255,88,0,0.3); background: rgba(255,88,0,0.08); }
+  .pill-community { color: var(--teal); border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.08); }
+
+  .featured-ep h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700; margin-bottom: 12px; line-height: 1.3;
+  }
+  .featured-ep .ep-desc { font-size: 15px; color: var(--fp-text-secondary); line-height: 1.7; margin-bottom: 24px; }
+  .hosts-in-ep { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .host-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px 4px 4px; background: var(--fp-dark);
+    border-radius: 100px; font-size: 12px; font-weight: 500; border: 1px solid var(--fp-dark-border);
+  }
+  .host-chip-avatar {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--fp-orange-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; color: var(--fp-orange);
+  }
+
+  .featured-player {
+    background: var(--fp-dark); border: 1px solid var(--fp-dark-border);
+    border-radius: 16px; padding: 40px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; min-height: 280px;
+  }
+  .fp-mark-large { width: 80px; margin-bottom: 24px; opacity: 0.6; }
+  .play-btn {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--fp-orange);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; cursor: pointer; transition: all 0.2s;
+  }
+  .play-btn:hover { transform: scale(1.05); box-shadow: 0 8px 24px rgba(255,88,0,0.4); }
+  .play-btn::after {
+    content: ''; width: 0; height: 0;
+    border-left: 18px solid var(--fp-cream); border-top: 11px solid transparent; border-bottom: 11px solid transparent;
+    margin-left: 4px;
+  }
+  .duration-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fp-text-tertiary); }
+
+  /* ===== EPISODES GRID ===== */
+  .episodes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .ep-card {
+    background: var(--fp-dark-card); border: 1px solid var(--fp-dark-border);
+    border-radius: 14px; padding: 24px; transition: all 0.2s;
+    cursor: pointer; text-decoration: none; color: inherit; display: block;
+  }
+  .ep-card:hover { border-color: var(--fp-orange); background: rgba(33,29,24,0.8); transform: translateY(-2px); }
+  .ep-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .ep-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;
+  }
+  .ep-card .ep-card-desc {
+    font-size: 13px; color: var(--fp-text-secondary); line-height: 1.6; margin-bottom: 12px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .ep-card-footer { display: flex; justify-content: space-between; align-items: center; }
+  .ep-card-hosts { display: flex; }
+  .ep-card-host-dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--fp-orange-dim); border: 2px solid var(--fp-dark-card);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; color: var(--fp-orange); margin-left: -6px;
+  }
+  .ep-card-host-dot:first-child { margin-left: 0; }
+  .ep-card-duration { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fp-text-tertiary); }
+
+  /* ===== PILLARS ===== */
+  .pillars-section { background: var(--fp-cream); color: var(--fp-dark); }
+  .pillars-section .section-label { color: var(--fp-orange); }
+  .pillars-section .section-title { color: var(--fp-dark); }
+  .pillars-section .section-desc { color: #5a5044; }
+  .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .pillar-card {
+    background: white; border: 1px solid #e8e0d0; border-radius: 14px;
+    padding: 28px; transition: all 0.2s;
+  }
+  .pillar-card:hover { border-color: var(--fp-orange); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .pillar-icon { font-size: 28px; margin-bottom: 16px; }
+  .pillar-card h4 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--fp-dark); }
+  .pillar-card p { font-size: 14px; color: #7a6d5c; line-height: 1.6; }
+  .pillar-count { margin-top: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #b8a88a; }
+
+  /* ===== COMMUNITY ===== */
+  .community-section { background: var(--fp-orange); color: var(--fp-cream); position: relative; overflow: hidden; }
+  .community-section::after {
+    content: ''; position: absolute; right: -100px; top: 50%; transform: translateY(-50%);
+    width: 500px; height: 500px;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 103 55' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z' fill='%23ffffff' fill-opacity='0.15'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z' fill='%23ffffff' fill-opacity='0.15'/%3E%3Ccircle cx='74.9306' cy='27.3276' r='27.3276' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    opacity: 0.5;
+  }
+  .community-inner { max-width: 700px; position: relative; z-index: 1; }
+  .community-section .section-label { color: var(--fp-cream); opacity: 0.7; }
+  .community-section h2 {
+    font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700; margin-bottom: 16px; line-height: 1.3;
+  }
+  .community-section p {
+    font-size: 16px; color: rgba(255,255,240,0.85); line-height: 1.8; margin-bottom: 32px;
+  }
+  .btn-cream {
+    display: inline-flex; padding: 14px 32px;
+    background: var(--fp-cream); color: var(--fp-dark);
+    border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px;
+    transition: all 0.2s;
+  }
+  .btn-cream:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  /* ===== NEWSLETTER ===== */
+  .newsletter-form { max-width: 480px; margin: 0 auto; display: flex; gap: 12px; }
+  .newsletter-form input {
+    flex: 1; padding: 14px 20px; background: var(--fp-dark-elevated);
+    border: 1px solid var(--fp-dark-border); border-radius: 10px;
+    color: var(--fp-text); font-size: 14px; font-family: inherit; outline: none;
+  }
+  .newsletter-form input:focus { border-color: var(--fp-orange); }
+  .newsletter-form input::placeholder { color: var(--fp-text-tertiary); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--fp-dark-border); padding: 48px 24px; text-align: center;
+  }
+  .footer-logo { margin-bottom: 16px; }
+  .footer-logo svg { height: 20px; }
+  .footer-tagline { font-size: 13px; color: var(--fp-text-tertiary); margin-bottom: 24px; font-style: italic; font-family: 'Playfair Display', serif; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .footer-links a { color: var(--fp-text-secondary); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--fp-orange); }
+
+  /* ===== THUMBNAILS ===== */
+  .ep-card-thumb {
+    width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: center; position: relative;
+    overflow: hidden; background: var(--fp-dark);
+  }
+  .thumb-inner {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    position: relative; padding: 16px;
+  }
+  .thumb-avatars { display: flex; gap: 8px; position: relative; z-index: 1; }
+  .thumb-avatar-lg {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--fp-orange-dim); border: 2px solid var(--fp-dark-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; color: var(--fp-orange);
+    font-family: 'Playfair Display', serif;
+  }
+  .thumb-title-overlay {
+    position: absolute; bottom: 12px; left: 16px; right: 16px;
+    font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700;
+    color: var(--fp-text); line-height: 1.3; z-index: 1;
+  }
+  .thumb-pill-overlay {
+    position: absolute; top: 12px; right: 12px; z-index: 1;
+  }
+  .thumb-gradient {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+    background: linear-gradient(transparent, rgba(16,12,8,0.9));
+  }
+  .thumb-bg-pattern {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.06;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .thumb-bg-pattern svg { width: 120px; }
+
+  /* ===== FOUNDERS (ABOUT) ===== */
+  .founders-section { background: var(--fp-cream); color: var(--fp-dark); }
+  .founders-section .section-label { color: var(--fp-orange); }
+  .founders-section .section-title { color: var(--fp-dark); }
+  .founders-section .section-desc { color: #5a5044; }
+  .founder-card {
+    display: grid; grid-template-columns: 200px 1fr; gap: 40px;
+    padding: 40px 0; border-bottom: 1px solid #e8e0d0; align-items: start;
+  }
+  .founder-card:last-child { border-bottom: none; }
+  .founder-avatar-lg {
+    width: 200px; height: 200px; border-radius: 16px;
+    object-fit: cover; flex-shrink: 0;
+    border: 3px solid #e8e0d0;
+    transition: border-color 0.3s;
+  }
+  .founder-card:hover .founder-avatar-lg { border-color: var(--fp-orange); }
+  .founder-info {}
+  .founder-nickname {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--fp-orange); text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .founder-name {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 800;
+    color: var(--fp-dark); margin-bottom: 8px;
+  }
+  .founder-title { font-size: 14px; color: #7a6d5c; margin-bottom: 16px; font-weight: 500; }
+  .founder-bio { font-size: 15px; color: #5a5044; line-height: 1.8; margin-bottom: 16px; }
+  .founder-social { display: flex; gap: 16px; }
+  .founder-social a {
+    font-size: 13px; color: var(--fp-orange); text-decoration: none; font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  .founder-social a:hover { opacity: 0.7; }
+
+  /* ===== BOOKS ===== */
+  .books-section { background: var(--fp-dark-elevated); }
+  .books-list { max-width: 700px; }
+  .book-item {
+    padding: 8px 0; font-size: 15px; line-height: 1.6;
+    border-bottom: 1px solid var(--fp-dark-border);
+  }
+  .book-item a {
+    text-decoration: none; transition: color 0.2s;
+  }
+  .book-item a:hover { color: var(--fp-orange); }
+  .book-great a { color: #4dbe6e; }
+  .book-good a { color: #60a5fa; }
+  .book-normal a { color: var(--fp-text-secondary); }
+  .book-author { font-size: 13px; color: var(--fp-text-tertiary); margin-left: 8px; }
+  .books-legend {
+    display: flex; gap: 24px; margin-bottom: 32px; font-size: 13px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ===== SHOP ===== */
+  .shop-section { background: var(--fp-cream); color: var(--fp-dark); }
+  .shop-section .section-label { color: var(--fp-orange); }
+  .shop-section .section-title { color: var(--fp-dark); }
+  .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .shop-card {
+    background: white; border: 1px solid #e8e0d0; border-radius: 16px;
+    overflow: hidden; transition: all 0.2s;
+  }
+  .shop-card:hover { border-color: var(--fp-orange); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .shop-img {
+    width: 100%; aspect-ratio: 1; background: #f0ebe0;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .shop-img-logo { opacity: 0.15; width: 120px; }
+  .shop-product-tag {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--fp-dark); color: var(--fp-cream);
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  }
+  .shop-card-body { padding: 20px; }
+  .shop-card h4 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; margin-bottom: 4px; color: var(--fp-dark); }
+  .shop-card .shop-desc { font-size: 13px; color: #7a6d5c; margin-bottom: 12px; }
+  .shop-price { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 600; color: var(--fp-orange); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hosts-grid { grid-template-columns: repeat(2, 1fr); }
+    .episodes-grid { grid-template-columns: 1fr; }
+    .pillars-grid { grid-template-columns: 1fr; }
+    .featured-ep { grid-template-columns: 1fr; padding: 24px; }
+    .hero-stats { gap: 24px; }
+    .subscribe-row { flex-wrap: wrap; gap: 16px; }
+    .founder-card { grid-template-columns: 1fr; }
+    .founder-avatar-lg { width: 120px; height: 120px; font-size: 36px; }
+    .shop-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg class="nav-logo-mark" height="24" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+        <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+      </svg>
+      <span style="font-weight:700;font-size:16px;color:var(--fp-text);letter-spacing:-0.3px;">podcast<span style="color:var(--fp-orange);">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#episodes">Epizódok</a>
+      <a href="about.html">Alapítók</a>
+      <a href="#pillars">Témák</a>
+      <a href="bookshelf.html">Könyvek</a>
+      <a href="shop.html">Shop</a>
+      <a href="#subscribe" class="nav-cta">Feliratkozás</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Background logo mark -->
+  <svg class="hero-logo-large" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+    <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+  </svg>
+
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Új epizód · E24 · AI ügynökök, ingatlanbuborék, oktatás
+  </div>
+
+  <!-- Horizontal logo -->
+  <svg class="hero-logo-center" viewBox="0 0 643 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M17.1549 4.32031C7.6598 9.81287 1.27148 20.079 1.27148 31.8372C1.27148 43.5953 7.6598 53.8614 17.1549 59.354V4.32031Z" fill="#FF5800"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M52.8923 0.0683594C35.3481 0.0683594 21.1257 14.2907 21.1257 31.8349C21.1257 49.3791 35.3481 63.6014 52.8923 63.6014V0.0683594Z" fill="#FF5800"/>
+    <circle cx="88.5608" cy="31.835" r="31.835" fill="#FF5800"/>
+    <path d="M164.126 18.7767V28.4372H134.993V18.7767H164.126ZM142.919 62.7475V13.0698C142.919 10.3195 143.434 8.05047 144.498 6.22838C145.562 4.4063 147.14 3.03113 149.267 2.1029C151.395 1.17467 154.037 0.693359 157.194 0.693359C158.67 0.693359 160.077 0.693359 161.38 0.693359C162.719 0.693359 163.611 0.693359 164.126 0.693359L164.16 10.3195C163.782 10.3195 163.13 10.3195 162.238 10.3195C161.346 10.3195 160.557 10.3195 159.939 10.3195C158.224 10.3195 156.988 10.6977 156.268 11.4196C155.547 12.1416 155.17 13.4136 155.17 15.1325V62.7475H142.919Z" fill="#FFFFF0"/>
+    <path d="M188.489 62.7477V18.777H200.259V26.2716H200.396C201.22 23.59 202.489 21.6304 204.205 20.3928C205.921 19.1208 208.22 18.502 211.137 18.502C211.857 18.502 212.509 18.5019 213.127 18.5363C213.744 18.5363 214.259 18.5707 214.74 18.6051V29.0563C214.293 29.0219 213.573 28.9875 212.543 28.9188C211.514 28.85 210.485 28.85 209.455 28.85C207.808 28.85 206.298 29.2282 204.96 29.9845C203.622 30.7409 202.592 31.8754 201.837 33.3881C201.082 34.9007 200.705 36.7572 200.705 38.9575V62.7821L188.489 62.7477Z" fill="#FFFFF0"/>
+    <path d="M236.701 63.8128C232.892 63.8128 229.529 63.2284 226.544 62.0595C223.593 60.8906 221.191 59.206 219.406 56.9714C217.622 54.7367 216.627 52.0552 216.387 48.9267H228.397C228.637 50.8519 229.426 52.3302 230.799 53.4303C232.171 54.5305 234.059 55.0462 236.461 55.0462C238.725 55.0462 240.51 54.5992 241.814 53.7397C243.118 52.8803 243.735 51.7801 243.735 50.405C243.735 49.2361 243.221 48.3079 242.225 47.5859C241.23 46.8639 239.823 46.3482 238.073 45.9701L230.353 44.4574C226.098 43.6323 222.872 42.1196 220.676 39.9538C218.446 37.7879 217.348 35.0376 217.348 31.6684C217.348 28.8493 218.102 26.4084 219.647 24.3457C221.156 22.2486 223.318 20.6671 226.098 19.4982C228.877 18.3637 232.171 17.7793 235.98 17.7793C239.755 17.7793 243.049 18.3981 245.897 19.6014C248.745 20.8046 250.976 22.5236 252.554 24.7582C254.133 26.9929 254.99 29.6057 255.059 32.6654H243.701C243.701 30.9121 243.015 29.4338 241.642 28.2649C240.27 27.096 238.485 26.5116 236.289 26.5116C234.196 26.5116 232.514 26.9585 231.313 27.8523C230.112 28.7462 229.495 29.8463 229.495 31.1871C229.495 32.3216 229.975 33.2499 230.936 33.9718C231.897 34.6938 233.201 35.2095 234.848 35.5532L243.152 37.1691C247.579 38.0629 250.838 39.4725 252.932 41.4321C255.025 43.3917 256.054 46.0045 256.054 49.2361C256.054 52.1583 255.231 54.7024 253.584 56.8682C251.936 59.0341 249.637 60.7531 246.721 61.9563C243.907 63.2283 240.544 63.8128 236.701 63.8128Z" fill="#FFFFF0"/>
+    <path d="M286.971 18.7756V28.4361H258.182V18.7756H286.971ZM265.765 6.77734H278.015V49.1667C278.015 50.645 278.324 51.6763 278.908 52.2608C279.491 52.8452 280.623 53.1203 282.305 53.1203C282.991 53.1203 283.815 53.1203 284.775 53.0859C285.736 53.0859 286.457 53.0515 287.006 53.0515V62.712C286.251 62.712 285.221 62.712 283.883 62.712C282.545 62.712 281.207 62.712 279.903 62.712C275.064 62.712 271.496 61.7494 269.197 59.8585C266.897 57.9677 265.765 55.0111 265.765 51.0575V6.77734Z" fill="#FFFFF0"/>
+    <path d="M169.239 62.7464V18.7756H181.454V62.7464H169.239ZM175.346 0.210938C171.778 0.210938 168.861 3.13315 168.861 6.70857C168.861 10.284 171.778 13.2062 175.346 13.2062C178.915 13.2062 181.832 10.284 181.832 6.70857C181.832 3.13315 178.915 0.210938 175.346 0.210938Z" fill="#FFFFF0"/>
+    <path d="M305.536 80.1424V18.7759H317.58V24.7235H317.717C318.644 23.2108 319.742 21.9388 321.046 20.9074C322.35 19.876 323.825 19.1197 325.438 18.604C327.085 18.0883 328.835 17.8477 330.722 17.8477C334.463 17.8477 337.757 18.8103 340.605 20.7355C343.453 22.6607 345.649 25.3423 347.262 28.7802C348.84 32.2181 349.664 36.206 349.664 40.7097C349.664 45.2821 348.875 49.3045 347.296 52.7424C345.718 56.1803 343.487 58.8618 340.674 60.7871C337.826 62.7123 334.497 63.6749 330.688 63.6749C328.767 63.6749 327.016 63.3998 325.404 62.8154C323.791 62.2653 322.35 61.4059 321.08 60.2714C319.81 59.1369 318.747 57.7617 317.889 56.1459H317.82V80.1424H305.536ZM327.497 53.6706C329.453 53.6706 331.169 53.1549 332.644 52.1579C334.12 51.1609 335.252 49.6826 336.075 47.7574C336.899 45.8322 337.311 43.4944 337.311 40.7441C337.311 37.9938 336.899 35.656 336.075 33.7308C335.252 31.8055 334.12 30.3272 332.678 29.3303C331.237 28.2989 329.487 27.7832 327.497 27.7832C325.438 27.7832 323.654 28.3333 322.075 29.399C320.497 30.4648 319.296 31.9774 318.438 33.9027C317.58 35.8279 317.134 38.1313 317.134 40.7441C317.134 43.3569 317.58 45.6259 318.438 47.5855C319.296 49.5107 320.531 51.0234 322.075 52.0892C323.654 53.1205 325.438 53.6706 327.497 53.6706Z" fill="#FFFFF0"/>
+    <path d="M354.228 62.7458V18.775H365.998V26.2696H366.135C366.958 23.5881 368.228 21.6285 369.944 20.3908C371.659 19.1532 373.959 18.5 376.875 18.5C377.596 18.5 378.248 18.5 378.866 18.5344C379.483 18.5344 379.998 18.5688 380.478 18.6031V29.0544C380.032 29.02 379.312 28.9856 378.282 28.9168C377.253 28.8481 376.223 28.8481 375.194 28.8481C373.547 28.8481 372.037 29.2263 370.699 29.9826C369.36 30.7389 368.331 31.8734 367.576 33.3861C366.821 34.8988 366.444 36.7553 366.444 38.9555V62.7802H354.228V62.7458Z" fill="#FFFFF0"/>
+    <path d="M416.371 38.3376V62.7467H404.155V18.7759H416.165V30.2241H414.072C415.479 26.3049 417.469 23.2795 420.043 21.1137C422.616 18.9478 425.876 17.8477 429.857 17.8477C432.979 17.8477 435.69 18.5352 437.989 19.876C440.288 21.2168 442.073 23.1764 443.342 25.7548C444.612 28.3333 445.23 31.4961 445.23 35.2091V62.7467H433.014V37.4781C433.014 34.5215 432.327 32.2525 430.921 30.7398C429.514 29.2271 427.523 28.4708 424.95 28.4708C423.268 28.4708 421.759 28.8146 420.455 29.5022C419.151 30.1897 418.156 31.2555 417.435 32.6994C416.749 34.1433 416.371 36.0342 416.371 38.3376Z" fill="#FFFFF0"/>
+    <path d="M472.098 63.7433C467.706 63.7433 463.828 62.7806 460.534 60.821C457.24 58.8958 454.666 56.1799 452.813 52.742C450.96 49.3041 450.034 45.3161 450.034 40.7781C450.034 36.2401 450.96 32.2177 452.813 28.7798C454.666 25.3075 457.24 22.626 460.534 20.6664C463.828 18.7411 467.671 17.7441 472.098 17.7441C474.946 17.7441 477.588 18.1911 480.024 19.0505C482.461 19.91 484.588 21.1133 486.441 22.6603C488.26 24.2074 489.735 26.0295 490.799 28.161C491.897 30.2925 492.515 32.6302 492.721 35.2087H480.882C480.711 34.0742 480.402 33.0428 479.956 32.1146C479.51 31.1863 478.892 30.3956 478.206 29.7424C477.485 29.0892 476.627 28.5735 475.667 28.1954C474.671 27.8516 473.573 27.6453 472.338 27.6453C470.279 27.6453 468.529 28.161 467.054 29.2611C465.578 30.3269 464.446 31.8395 463.657 33.8335C462.867 35.7931 462.49 38.1309 462.49 40.7781C462.49 43.4253 462.867 45.6943 463.657 47.6539C464.446 49.6135 465.544 51.1262 467.054 52.1919C468.529 53.2577 470.314 53.8077 472.338 53.8077C473.573 53.8077 474.637 53.6358 475.632 53.2577C476.593 52.9139 477.451 52.3982 478.172 51.7106C478.892 51.0574 479.475 50.2323 479.922 49.3041C480.368 48.3758 480.676 47.3445 480.848 46.21L492.824 46.1756C492.652 48.7196 492.035 51.0574 491.005 53.1889C489.941 55.3204 488.5 57.1769 486.647 58.7583C484.794 60.3397 482.667 61.5774 480.196 62.4369C477.691 63.2963 474.98 63.7433 472.098 63.7433Z" fill="#FFFFF0"/>
+    <path d="M516.707 80.1424V18.7759H528.751V24.7235H528.888C529.815 23.2108 530.913 21.9388 532.217 20.9074C533.521 19.876 534.996 19.1197 536.609 18.604C538.256 18.0883 540.006 17.8477 541.893 17.8477C545.634 17.8477 548.928 18.8103 551.776 20.7355C554.624 22.6607 556.82 25.3423 558.433 28.7802C560.011 32.2181 560.835 36.206 560.835 40.7097C560.835 45.2821 560.046 49.3045 558.467 52.7424C556.889 56.1803 554.658 58.8618 551.845 60.7871C548.996 62.7123 545.668 63.6749 541.859 63.6749C539.937 63.6749 538.187 63.3998 536.575 62.8154C534.962 62.2653 533.521 61.4059 532.251 60.2714C530.981 59.1369 529.918 57.7617 529.06 56.1459H528.991V80.1424H516.707ZM538.668 53.6706C540.624 53.6706 542.339 53.1549 543.815 52.1579C545.29 51.1265 546.423 49.6826 547.246 47.7574C548.07 45.8322 548.482 43.4944 548.482 40.7441C548.482 37.9938 548.07 35.656 547.246 33.7308C546.423 31.8055 545.29 30.3272 543.849 29.3303C542.408 28.2989 540.658 27.7832 538.668 27.7832C536.609 27.7832 534.825 28.3333 533.246 29.399C531.668 30.4648 530.467 31.9774 529.609 33.9027C528.751 35.8279 528.305 38.1313 528.305 40.7441C528.305 43.3569 528.751 45.6259 529.609 47.5855C530.467 49.5107 531.702 51.0234 533.246 52.0892C534.825 53.1205 536.609 53.6706 538.668 53.6706Z" fill="#FFFFF0"/>
+    <path d="M577.512 0.691406V62.7455H565.296V0.691406H577.512Z" fill="#FFFFF0"/>
+    <path d="M604.517 63.744C600.091 63.744 596.213 62.7814 592.919 60.8218C589.625 58.8622 587.085 56.1463 585.267 52.674C583.448 49.2017 582.556 45.2481 582.556 40.8132C582.556 36.3096 583.482 32.356 585.301 28.8837C587.12 25.4114 589.659 22.6955 592.919 20.7359C596.179 18.7763 599.885 17.7793 604.071 17.7793C607.331 17.7793 610.248 18.3294 612.89 19.4295C615.532 20.5296 617.797 22.1111 619.718 24.1394C621.64 26.1678 623.116 28.5743 624.145 31.359C625.174 34.1437 625.689 37.2034 625.689 40.5726V43.873H586.914V36.0689H619.753L614.262 37.891C614.262 35.6564 613.851 33.7655 613.061 32.1497C612.238 30.5339 611.105 29.2963 609.63 28.4368C608.154 27.5773 606.404 27.1304 604.38 27.1304C602.355 27.1304 600.605 27.5773 599.13 28.4368C597.654 29.2963 596.488 30.5683 595.698 32.1497C594.875 33.7655 594.497 35.6908 594.497 37.891V43.2541C594.497 45.4888 594.909 47.4828 595.733 49.2017C596.556 50.9207 597.723 52.2271 599.267 53.1553C600.811 54.0835 602.698 54.5648 604.895 54.5648C606.507 54.5648 607.914 54.3242 609.184 53.8429C610.419 53.3616 611.449 52.7084 612.272 51.8489C613.096 50.9894 613.679 50.0268 614.091 48.9267L625.312 48.9611C624.763 51.8489 623.493 54.3929 621.571 56.6276C619.65 58.8622 617.213 60.6155 614.262 61.8532C611.346 63.1252 608.086 63.744 604.517 63.744Z" fill="#FFFFF0"/>
+    <path d="M635.331 63.4688C633.41 63.4688 631.728 62.7813 630.39 61.4061C629.018 60.0309 628.331 58.3808 628.331 56.3868C628.331 54.4272 629.018 52.7426 630.39 51.3674C631.763 49.9923 633.41 49.3047 635.331 49.3047C637.287 49.3047 638.969 49.9923 640.341 51.3674C641.714 52.7426 642.4 54.3928 642.4 56.3868C642.4 58.3464 641.714 60.0309 640.341 61.4061C638.934 62.7813 637.287 63.4688 635.331 63.4688Z" fill="#FF5800"/>
+    <path d="M385.282 62.7464V18.7756H397.498V62.7464H385.282ZM391.39 0.210938C387.821 0.210938 384.905 3.13315 384.905 6.70857C384.905 10.284 387.821 13.2062 391.39 13.2062C394.959 13.2062 397.876 10.284 397.876 6.70857C397.876 3.13315 394.959 0.210938 391.39 0.210938Z" fill="#FFFFF0"/>
+    <path d="M497.01 62.7464V18.7756H509.226V62.7464H497.01ZM503.118 0.210938C499.549 0.210938 496.633 3.13315 496.633 6.70857C496.633 10.284 499.549 13.2062 503.118 13.2062C506.687 13.2062 509.603 10.284 509.603 6.70857C509.603 3.13315 506.687 0.210938 503.118 0.210938Z" fill="#FFFFF0"/>
+  </svg>
+
+  <p class="hero-tagline">
+    A jövő Magyarországát formáló gondolkodók beszélgetése<span class="fp-dot">.</span>
+  </p>
+
+  <h1>Nem interjú — hanem <em>egy baráti kör,</em> ahova meghívást kapsz<span style="color:var(--fp-orange);">.</span></h1>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">24</div><div class="label">Epizód</div></div>
+    <div class="hero-stat"><div class="num">47</div><div class="label">Vendég</div></div>
+    <div class="hero-stat"><div class="num">120K+</div><div class="label">Letöltés</div></div>
+    <div class="hero-stat"><div class="num">8.4K</div><div class="label">Feliratkozó</div></div>
+  </div>
+  <div class="hero-actions">
+    <a href="#episodes" class="btn-primary">▶ &nbsp;Legutóbbi epizód</a>
+    <a href="#subscribe" class="btn-secondary">Feliratkozás</a>
+  </div>
+</div>
+
+<!-- SUBSCRIBE ROW -->
+<div class="subscribe-row">
+  <a href="#" class="subscribe-item">YouTube</a>
+  <a href="#" class="subscribe-item">Spotify</a>
+  <a href="#" class="subscribe-item">Apple Podcasts</a>
+  <a href="#" class="subscribe-item">Substack</a>
+  <a href="#" class="subscribe-item">LinkedIn</a>
+</div>
+
+<!-- HOSTS -->
+<section style="padding-top:48px;padding-bottom:48px;">
+  <div class="container">
+    <div class="section-label">A Mag</div>
+    <h2 class="section-title"><span class="serif-italic">A Besties</span><span class="fp-dot">.</span></h2>
+    <div class="hosts-grid">
+      <div class="host-card">
+        <div class="host-avatar" style="background:none;border:none;overflow:hidden;"><img src="images/pereczes-janos.jpg" alt="Pereczes János" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+        <div class="host-name">Pereczes János</div>
+        <div class="host-role">Az Építész</div>
+        <div class="host-bio">CEO, 1337 Partners. AI stratéga, Az Építési Napló szerzője. A podcast hajtómotorja.</div>
+        <span class="host-tag">80-90% jelenlét</span>
+      </div>
+      <div class="host-card">
+        <div class="host-avatar" style="background:none;border:none;overflow:hidden;"><img src="images/gaal-norbert.jpg" alt="Gaál Norbert" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+        <div class="host-name">Gaál Norbert</div>
+        <div class="host-role">A Befektető</div>
+        <div class="host-bio">Befektető, stratéga, média-szakértő. A pénz és a piacok logikája.</div>
+        <span class="host-tag">60-70% jelenlét</span>
+      </div>
+      <div class="host-card">
+        <div class="host-avatar" style="background:none;border:none;overflow:hidden;"><img src="images/toreky-bence.png" alt="Töreky Bence" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+        <div class="host-name">Töreky Bence</div>
+        <div class="host-role">A Mérnök</div>
+        <div class="host-bio">Fintech befektető, venture builder, OXO Technologies. A pragmatizmus hangja.</div>
+        <span class="host-tag">40-50% jelenlét</span>
+      </div>
+      <div class="host-card">
+        <div class="host-avatar" style="background:none;border:none;overflow:hidden;"><img src="images/acs-zoltan.jpg" alt="Ács Zoltán" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+        <div class="host-name">Ács Zoltán</div>
+        <div class="host-role">A Gondolkodó</div>
+        <div class="host-bio">Közéleti gondolkodó, intézményépítő. A nagy kérdések embere.</div>
+        <span class="host-tag">40-50% jelenlét</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <p class="manifesto-quote">"Szedjük szét alkotóelemeire a jövőnket legjobban meghatározó témákat, híreket, interjúpartnerek történetét és tegyük össze úgy, hogy abból épüljön az ország<span class="fp-dot">.</span>"</p>
+    <p class="manifesto-attr">— FIRST PRINCIPLE HITVALLÁS</p>
+  </div>
+</section>
+
+<!-- FOUNDERS (ALL-IN ABOUT STYLE) -->
+<section id="founders" class="founders-section">
+  <div class="container">
+    <div class="section-label">Az Alapítók</div>
+    <h2 class="section-title" style="color:var(--fp-dark);"><span class="serif-italic">Négy arc, négy lens,</span> egy asztal<span class="fp-dot">.</span></h2>
+    <p class="section-desc">A First Principle Podcast magja. Barátok, akik nyíltan gondolkodnak a jövőről — és néha vendéget hívnak az asztalukhoz.</p>
+
+    <div class="founder-card">
+      <img class="founder-avatar-lg" src="images/pereczes-janos.jpg" alt="Pereczes János">
+      <div class="founder-info">
+        <div class="founder-nickname">[ Az Építész ]</div>
+        <div class="founder-name">Pereczes János</div>
+        <div class="founder-title">CEO, 1337 Partners · Az Építési Napló szerzője</div>
+        <div class="founder-bio">AI stratéga és vállalkozó, aki az 1337 Partners-en keresztül a magyar vállalatok AI transzformációját segíti. Az Építési Napló blogon heti rendszerességgel osztja meg gondolatait a jövő Magyarországáról, a technológiáról és a vezetésről. A First Principle Podcast bajnoka és facilitátora — ő hajtja, szervezi és moderálja a beszélgetéseket.</div>
+        <div class="founder-social">
+          <a href="#">LinkedIn →</a>
+          <a href="#">X (Twitter) →</a>
+          <a href="#">Építési Napló →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="founder-card">
+      <img class="founder-avatar-lg" src="images/gaal-norbert.jpg" alt="Gaál Norbert">
+      <div class="founder-info">
+        <div class="founder-nickname">[ A Befektető ]</div>
+        <div class="founder-name">Gaál Norbert</div>
+        <div class="founder-title">Befektető · Stratéga · Média-szakértő</div>
+        <div class="founder-bio">A pénz, a piacok és a tőke logikáját hozza az asztalra. Befektetői háttérrel és média-tapasztalattal rendelkezik — a podcast stratégiai irányának egyik fő meghatározója. Amikor a piaci trendekről, befektetésekről vagy a tőke erejéről esik szó, Norbi az, aki a számokat és a nagy képet összeköti.</div>
+        <div class="founder-social">
+          <a href="#">LinkedIn →</a>
+          <a href="#">X (Twitter) →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="founder-card">
+      <img class="founder-avatar-lg" src="images/toreky-bence.png" alt="Töreky Bence">
+      <div class="founder-info">
+        <div class="founder-nickname">[ A Mérnök ]</div>
+        <div class="founder-name">Töreky Bence</div>
+        <div class="founder-title">Fintech befektető · Venture Builder · OXO Technologies</div>
+        <div class="founder-bio">Startup-építő és fintech befektető, aki a Tickething alapítójaként, a Drukka Startup Studio venture buildereként és az OXO Technologies befektetési igazgatójaként szerzett tapasztalatot a CEE tech ökoszisztémában. A pragmatizmus és a technikai mélység hangja — amikor a többiek a nagy vízióról beszélnek, Bence az, aki megkérdezi: "De hogyan?"</div>
+        <div class="founder-social">
+          <a href="#">LinkedIn →</a>
+          <a href="#">X (Twitter) →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="founder-card">
+      <img class="founder-avatar-lg" src="images/acs-zoltan.jpg" alt="Ács Zoltán">
+      <div class="founder-info">
+        <div class="founder-nickname">[ A Gondolkodó ]</div>
+        <div class="founder-name">Ács Zoltán</div>
+        <div class="founder-title">Közéleti gondolkodó · Intézményépítő</div>
+        <div class="founder-bio">A társadalom, az intézmények és a rendszerszintű kérdések szakértője. Zoli az, aki a legnagyobb kérdéseket teszi fel: milyen országot akarunk? Hogyan épülnek működő intézmények? Mi a szerepe a civil társadalomnak? Amikor megszólal, mindig mélyre megy — és a hallgatók ezért szeretik.</div>
+        <div class="founder-social">
+          <a href="#">LinkedIn →</a>
+          <a href="#">X (Twitter) →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURED EPISODE -->
+<section id="episodes" style="padding-top:48px;">
+  <div class="container">
+    <div class="section-label">Legfrissebb</div>
+    <h2 class="section-title"><span class="serif-italic">Legutóbbi</span> epizód<span class="fp-dot">.</span></h2>
+    <div class="featured-ep">
+      <div>
+        <div class="featured-ep-meta">
+          <span class="ep-number">E24</span>
+          <span class="ep-date">2027. márc. 21.</span>
+          <span class="ep-pill pill-ai">Besties</span>
+        </div>
+        <h3>AI ügynökök, magyar ingatlanbuborék, és miért nem működik az oktatás</h3>
+        <p class="ep-desc">A besties leül és szétszedi a hét három legfontosabb témáját: Jani az AI ügynökök munkahelyi térhódításáról, Norbi a magyar ingatlanpiaci buborék jeleiről, Zoli pedig arról, miért nem működik az oktatási rendszer — és mit kellene tenni.</p>
+        <div class="hosts-in-ep">
+          <span class="host-chip"><span class="host-chip-avatar">JP</span> Jani</span>
+          <span class="host-chip"><span class="host-chip-avatar">GN</span> Norbi</span>
+          <span class="host-chip"><span class="host-chip-avatar">TB</span> Bence</span>
+          <span class="host-chip"><span class="host-chip-avatar">ÁZ</span> Zoli</span>
+        </div>
+        <a href="#" class="btn-primary">▶ &nbsp;Lejátszás</a>
+        <a href="#" class="btn-secondary" style="margin-left:12px;">Transcript</a>
+      </div>
+      <div class="featured-player">
+        <svg class="fp-mark-large" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+          <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+        </svg>
+        <div class="play-btn"></div>
+        <div class="duration-text">01:22:47</div>
+      </div>
+    </div>
+
+    <!-- EPISODES GRID — Mix: Besties multi-topic + Vendéges deep dive -->
+    <div class="episodes-grid">
+      <!-- E23: VENDÉG — Kaiser Kristóf (ESOP, startup jog) -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#1a2e1a,#0f1f0f);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#4dbe6e"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#4dbe6e"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#4dbe6e"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">KK</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-finance">Vendég</span></div>
+          <div class="thumb-title-overlay">E23 · Kaiser Kristóf: ESOP & startup jog</div>
+        </div>
+        <h4>Kaiser Kristóf: Hogyan adjunk részt a csapatunknak? ESOP és startup jog Magyarországon</h4>
+        <p class="ep-card-desc">A Kaiser & Pilisi társalapítója, az első magyar új típusú ESOP megalkotója a tulajdonosi kultúráról, startup jogi kérdésekről és az értékpapírjogról.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">KK</span></div>
+          <span class="ep-card-duration">52 perc</span>
+        </div>
+      </div>
+      <!-- E22: BESTIES multi-topic -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#1a2744,#0f1a2e);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#4d8be5"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#4d8be5"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#4d8be5"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">TB</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-ai">Besties</span></div>
+          <div class="thumb-title-overlay">E22 · EU AI Act, forint, visszatérők</div>
+        </div>
+        <h4>EU AI Act, forint gyengülés, és a visszatérő magyarok</h4>
+        <p class="ep-card-desc">Jani az EU AI Act gyakorlati hatásairól, Norbi a forint gyengülés okairól és kilátásairól, Bence a hazatérő magyarok trendjéről és arról, mit hoznak haza.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">TB</span></div>
+          <span class="ep-card-duration">61 perc</span>
+        </div>
+      </div>
+      <!-- E21: VENDÉG — Palasics Péter (Milestone, oktatás) -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#2e2510,#1f1a0a);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#f59e0b"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#f59e0b"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#f59e0b"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">TB</span><span class="thumb-avatar-lg">PP</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-leadership">Vendég</span></div>
+          <div class="thumb-title-overlay">E21 · Palasics Péter: Milestone & oktatás</div>
+        </div>
+        <h4>Palasics Péter: A Milestone, a Fintech Szövetség és hogyan neveljünk gondolkodókat?</h4>
+        <p class="ep-card-desc">A Milestone Institute CEO-ja és a Magyar Fintech Szövetség elnöke a tehetségfejlesztésről, fintech ökoszisztémáról és a reverse brain drainről.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">TB</span><span class="ep-card-host-dot">PP</span></div>
+          <span class="ep-card-duration">71 perc</span>
+        </div>
+      </div>
+      <!-- E20: BESTIES multi-topic -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#0f2520,#0a1a18);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#14b8a6"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#14b8a6"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#14b8a6"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">TB</span><span class="thumb-avatar-lg">ÁZ</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-community">Besties</span></div>
+          <div class="thumb-title-overlay">E20 · Exits, longevity, vidék</div>
+        </div>
+        <h4>Startup exits, longevity protokollok, és a vidéki Magyarország</h4>
+        <p class="ep-card-desc">A teljes mag: Norbi a legutóbbi magyar startup exitek tanulságairól, Jani a longevity protokollokról, Zoli a vidéki Magyarország lehetőségeiről és kihívásairól.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">TB</span><span class="ep-card-host-dot">ÁZ</span></div>
+          <span class="ep-card-duration">68 perc</span>
+        </div>
+      </div>
+      <!-- E19: VENDÉG — Faykiss Péter (fintech, HOLD AM) -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#1a2744,#0f1a2e);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#4d8be5"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#4d8be5"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#4d8be5"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">TB</span><span class="thumb-avatar-lg">FP</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-ai">Vendég</span></div>
+          <div class="thumb-title-overlay">E19 · Faykiss Péter: Fintech & HOLD</div>
+        </div>
+        <h4>Faykiss Péter: Az MNB-től a piacra — fintech, szabályozás és a HOLD Alapkezelő</h4>
+        <p class="ep-card-desc">Az ex-MNB digitalizációs igazgató, most a HOLD Alapkezelő fejlesztési igazgatója a fintech szabályozásról és arról, mit lát másképp belülről vs. kívülről.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">TB</span><span class="ep-card-host-dot">FP</span></div>
+          <span class="ep-card-duration">58 perc</span>
+        </div>
+      </div>
+      <!-- E18: BESTIES multi-topic -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#2e1a0a,#1f0f05);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">TB</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-hungary">Besties</span></div>
+          <div class="thumb-title-overlay">E18 · Tőkepiac, AI közigazgatás, generációk</div>
+        </div>
+        <h4>Tőkepiac kilátások, AI a közigazgatásban, és a generációs szakadék</h4>
+        <p class="ep-card-desc">Norbi a magyar tőkepiaci kilátásokról és befektetési lehetőségekről, Jani az AI közigazgatási alkalmazásairól, Bence a generációs szakadékról és hatásairól.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">TB</span></div>
+          <span class="ep-card-duration">63 perc</span>
+        </div>
+      </div>
+      <!-- E17: VENDÉG — Banai Ádám (MNB, pénzügyi stabilitás) -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#1a2e1a,#0f1f0f);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#4dbe6e"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#4dbe6e"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#4dbe6e"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">BA</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-finance">Vendég</span></div>
+          <div class="thumb-title-overlay">E17 · Banai Ádám: MNB & pénzügyi stabilitás</div>
+        </div>
+        <h4>Banai Ádám: Mit lát az MNB főközgazdásza — ingatlanpiac, hitelezés, stabilitás</h4>
+        <p class="ep-card-desc">Az MNB ügyvezető igazgatója és főközgazdásza az ingatlanpiaci kockázatokról, hitelezési trendekről és arról, miért fontos mindenkinek a pénzügyi stabilitás.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">BA</span></div>
+          <span class="ep-card-duration">55 perc</span>
+        </div>
+      </div>
+      <!-- E16: BESTIES multi-topic -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#251a35,#1a0f28);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#8b5cf6"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#8b5cf6"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#8b5cf6"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">TB</span><span class="thumb-avatar-lg">ÁZ</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-longevity">Besties</span></div>
+          <div class="thumb-title-overlay">E16 · Bitcoin, agile, szalon-modell</div>
+        </div>
+        <h4>Bitcoin Magyarországon, agile transzformáció, és a szalon-modell</h4>
+        <p class="ep-card-desc">A teljes mag: Bence a Bitcoin magyarországi helyzetéről, Jani az agile transzformáció valóságáról, Zoli a szalon-modellről és hogyan épül közösség gondolkodásból.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">TB</span><span class="ep-card-host-dot">ÁZ</span></div>
+          <span class="ep-card-duration">66 perc</span>
+        </div>
+      </div>
+      <!-- E15: VENDÉG — Szmola Roland (agile transzformáció, szervezetfejlesztés) -->
+      <div class="ep-card">
+        <div class="ep-card-thumb" style="background:linear-gradient(135deg,#2e2510,#1f1a0a);">
+          <div class="thumb-bg-pattern"><svg viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#f59e0b"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#f59e0b"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#f59e0b"/></svg></div>
+          <div class="thumb-avatars"><span class="thumb-avatar-lg">JP</span><span class="thumb-avatar-lg">GN</span><span class="thumb-avatar-lg">SR</span></div>
+          <div class="thumb-gradient"></div>
+          <div class="thumb-pill-overlay"><span class="ep-pill pill-leadership">Vendég</span></div>
+          <div class="thumb-title-overlay">E15 · Szmola Roland: Agile & szervezetfejlesztés</div>
+        </div>
+        <h4>Szmola Roland: Agile transzformáció, szervezetfejlesztés és miért nem skálázódnak a magyar cégek</h4>
+        <p class="ep-card-desc">A Methodology Architects alapítója arról, hogyan lehet valódi agile transzformációt végrehajtani, miért bukik meg a legtöbb kísérlet, és mit tanulhatunk a skandináv modelltől.</p>
+        <div class="ep-card-footer">
+          <div class="ep-card-hosts"><span class="ep-card-host-dot">JP</span><span class="ep-card-host-dot">GN</span><span class="ep-card-host-dot">SR</span></div>
+          <span class="ep-card-duration">54 perc</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="#" class="btn-secondary">Összes epizód →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS (CREAM BACKGROUND) -->
+<section id="pillars" class="pillars-section">
+  <div class="container">
+    <div class="section-label">Témapillérek</div>
+    <h2 class="section-title" style="color:var(--fp-dark);"><span class="serif-italic">Hat pillér,</span> egy jövőkép<span class="fp-dot">.</span></h2>
+    <p class="section-desc">Nem véletlenszerű témák — egy átgondolt gondolati ív, ami a jövő Magyarországát rajzolja meg.</p>
+    <div class="pillars-grid">
+      <div class="pillar-card"><div class="pillar-icon">🧠</div><h4>AI & Technológia</h4><p>Nem az eszközökről szól, hanem a strukturális hatásról. Hogyan változik a munka, a döntéshozás?</p><div class="pillar-count">5 epizód · 14K letöltés</div></div>
+      <div class="pillar-card"><div class="pillar-icon">💰</div><h4>Pénzügyek & Piacok</h4><p>Kamatok, ingatlan, tőkepiac — magyar kontextusban, erős véleményekkel.</p><div class="pillar-count">4 epizód · 11K letöltés</div></div>
+      <div class="pillar-card"><div class="pillar-icon">🏗️</div><h4>Vezetés & Szervezetépítés</h4><p>Skálázás, kultúra, tehetségmegtartás. Világszínvonalú szervezetek Magyarországon.</p><div class="pillar-count">4 epizód · 10K letöltés</div></div>
+      <div class="pillar-card"><div class="pillar-icon">⏳</div><h4>Longevity & Jövőtervezés</h4><p>Hogyan éljünk hosszabb, jobb és tudatosabb életet? Tudomány és protokollok.</p><div class="pillar-count">3 epizód · 9K letöltés</div></div>
+      <div class="pillar-card"><div class="pillar-icon">🇭🇺</div><h4>Magyarország 2035</h4><p>Milyen országot akarunk? Értékek mentén, nem pártok mentén gondolkodunk.</p><div class="pillar-count">5 epizód · 18K letöltés</div></div>
+      <div class="pillar-card"><div class="pillar-icon">🤝</div><h4>Hálózat & Közösség</h4><p>Hogyan építünk közösséget, ami képes változtatni? A szalon-modell és az FPC.</p><div class="pillar-count">3 epizód · 7K letöltés</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY (ORANGE) -->
+<section id="community" class="community-section">
+  <div class="container">
+    <div class="community-inner">
+      <div class="section-label">First Principle Club</div>
+      <h2><span class="serif-italic">A podcast mögött</span> egy közösség áll<span style="color:var(--fp-cream);">.</span></h2>
+      <p>A First Principle Club Magyarország legaktívabb gondolkodóinak hálózata. Zárt szalonvacsorák, éves summit, és egy közösség, ami együtt gondolkodik a jövőről.</p>
+      <a href="#" class="btn-cream">Tudj meg többet az FPC-ről →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKS (PATRICK COLLISON STYLE) -->
+<section id="books" class="books-section">
+  <div class="container">
+    <div class="section-label">Könyvespolc</div>
+    <h2 class="section-title"><span class="serif-italic">Amit olvasunk</span> és ajánlunk<span class="fp-dot">.</span></h2>
+    <p class="section-desc">A mag kedvenc könyvei. Nincs rend — pont úgy, ahogy egy valódi könyvespolcon sem.</p>
+    <div class="books-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#4dbe6e;"></span> Különösen ajánlott</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#60a5fa;"></span> Átlag feletti</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--fp-text-secondary);"></span> Érdemes elolvasni</div>
+    </div>
+    <div class="books-list">
+      <div class="book-item book-great"><a href="#">The Almanack of Naval Ravikant</a><span class="book-author">Eric Jorgenson</span></div>
+      <div class="book-item book-great"><a href="#">Zero to One</a><span class="book-author">Peter Thiel</span></div>
+      <div class="book-item book-good"><a href="#">Thinking, Fast and Slow</a><span class="book-author">Daniel Kahneman</span></div>
+      <div class="book-item book-great"><a href="#">The Hard Thing About Hard Things</a><span class="book-author">Ben Horowitz</span></div>
+      <div class="book-item book-normal"><a href="#">Outlive: The Science and Art of Longevity</a><span class="book-author">Peter Attia</span></div>
+      <div class="book-item book-good"><a href="#">Sapiens</a><span class="book-author">Yuval Noah Harari</span></div>
+      <div class="book-item book-great"><a href="#">Poor Charlie's Almanack</a><span class="book-author">Charles T. Munger</span></div>
+      <div class="book-item book-good"><a href="#">The Sovereign Individual</a><span class="book-author">James Dale Davidson & Lord William Rees-Mogg</span></div>
+      <div class="book-item book-normal"><a href="#">Antifragile</a><span class="book-author">Nassim Nicholas Taleb</span></div>
+      <div class="book-item book-great"><a href="#">High Output Management</a><span class="book-author">Andrew S. Grove</span></div>
+      <div class="book-item book-good"><a href="#">Principles</a><span class="book-author">Ray Dalio</span></div>
+      <div class="book-item book-normal"><a href="#">The Innovator's Dilemma</a><span class="book-author">Clayton M. Christensen</span></div>
+      <div class="book-item book-good"><a href="#">Lifespan: Why We Age — and Why We Don't Have To</a><span class="book-author">David A. Sinclair</span></div>
+      <div class="book-item book-great"><a href="#">Shoe Dog</a><span class="book-author">Phil Knight</span></div>
+      <div class="book-item book-normal"><a href="#">The Psychology of Money</a><span class="book-author">Morgan Housel</span></div>
+      <div class="book-item book-good"><a href="#">Why Nations Fail</a><span class="book-author">Daron Acemoglu & James A. Robinson</span></div>
+      <div class="book-item book-great"><a href="#">Thinking in Systems</a><span class="book-author">Donella H. Meadows</span></div>
+      <div class="book-item book-normal"><a href="#">Range: Why Generalists Triumph in a Specialized World</a><span class="book-author">David Epstein</span></div>
+      <div class="book-item book-good"><a href="#">The Beginning of Infinity</a><span class="book-author">David Deutsch</span></div>
+      <div class="book-item book-normal"><a href="#">Atomic Habits</a><span class="book-author">James Clear</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section id="shop" class="shop-section">
+  <div class="container">
+    <div class="section-label">Shop</div>
+    <h2 class="section-title" style="color:var(--fp-dark);"><span class="serif-italic">Viseld</span> az elveidet<span class="fp-dot">.</span></h2>
+    <p class="section-desc" style="color:#5a5044;">First Principle merch — egyszerű, minőségi, és emlékeztet arra, hogy gondolkodj alapelvekből.</p>
+    <div class="shop-grid">
+      <div class="shop-card">
+        <div class="shop-img">
+          <svg class="shop-img-logo" viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#100C08"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#100C08"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#100C08"/></svg>
+          <span class="shop-product-tag">ÚJ</span>
+        </div>
+        <div class="shop-card-body">
+          <h4>Classic Tee</h4>
+          <p class="shop-desc">100% pamut, first principle. logóval. Fekete vagy krém színben.</p>
+          <span class="shop-price">9,900 Ft</span>
+        </div>
+      </div>
+      <div class="shop-card">
+        <div class="shop-img" style="background:#100C08;">
+          <svg class="shop-img-logo" viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/></svg>
+          <span class="shop-product-tag" style="background:var(--fp-orange);color:var(--fp-cream);">BESTSELLER</span>
+        </div>
+        <div class="shop-card-body">
+          <h4>Logo Cap</h4>
+          <p class="shop-desc">Strukturált sapka az FP logójelel. Állítható, one-size. Fekete.</p>
+          <span class="shop-price">7,900 Ft</span>
+        </div>
+      </div>
+      <div class="shop-card">
+        <div class="shop-img" style="background:#1a1612;">
+          <svg class="shop-img-logo" viewBox="0 0 103 55" fill="none"><path d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FFFFF0"/><path d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FFFFF0"/><circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FFFFF0"/></svg>
+          <span class="shop-product-tag">PREMIUM</span>
+        </div>
+        <div class="shop-card-body">
+          <h4>Polo Shirt</h4>
+          <p class="shop-desc">Galléros piké póló, diszkrét FP hímzéssel a mellen. Sötétkék vagy fehér.</p>
+          <span class="shop-price">14,900 Ft</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <a href="#" class="btn-primary" style="background:var(--fp-dark);color:var(--fp-cream);">Összes termék →</a>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="subscribe" style="padding-top:48px;">
+  <div class="container" style="text-align:center;">
+    <div class="section-label" style="text-align:center;">Építési Napló</div>
+    <h2 class="section-title" style="max-width:none;"><span class="serif-italic">Ne maradj le</span> egy epizódról sem<span class="fp-dot">.</span></h2>
+    <p class="section-desc" style="margin:0 auto 32px;">Heti gondolatok a podcasthez, behind the scenes, és amit nem mondtunk ki a mikrofon előtt.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="email@pelda.hu">
+      <a href="#" class="btn-primary">Feliratkozás</a>
+    </div>
+    <p style="font-size:12px;color:var(--fp-text-tertiary);margin-top:12px;font-family:'JetBrains Mono',monospace;">8,400+ feliratkozó · heti 1 email · bármikor leiratkozhatsz</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="footer-logo">
+      <svg height="20" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+        <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+      </svg>
+    </div>
+    <p class="footer-tagline">A jövő Magyarországát formáló gondolkodók beszélgetése.</p>
+    <div class="footer-links">
+      <a href="#">YouTube</a><a href="#">Spotify</a><a href="#">Apple Podcasts</a>
+      <a href="#">LinkedIn</a><a href="#">Substack</a><a href="#">First Principle Club</a>
+    </div>
+    <p style="font-size:11px;color:var(--fp-text-tertiary);margin-top:24px;">© 2027 first principle. podcast · A First Principle Club médiaprojektje</p>
+  </div>
+</footer>
+
+</body>
+</html>

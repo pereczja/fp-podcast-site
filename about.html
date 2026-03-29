@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alapítók — first principle. podcast</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --fp-orange: #FF5800;
+    --fp-orange-dim: rgba(255, 88, 0, 0.12);
+    --fp-orange-glow: rgba(255, 88, 0, 0.06);
+    --fp-cream: #FFFFF0;
+    --fp-cream-dark: #F5F0E0;
+    --fp-dark: #100C08;
+    --fp-dark-elevated: #1a1612;
+    --fp-dark-card: #211d18;
+    --fp-dark-border: #302a22;
+    --fp-text: #FFFFF0;
+    --fp-text-secondary: #b8a88a;
+    --fp-text-tertiary: #7a6d5c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--fp-dark);
+    color: var(--fp-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .serif { font-family: 'Playfair Display', Georgia, serif; }
+  .serif-italic { font-family: 'Playfair Display', Georgia, serif; font-style: italic; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(16, 12, 8, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--fp-dark-border);
+    padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-mark { height: 28px; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    color: var(--fp-text-secondary); text-decoration: none;
+    font-size: 14px; font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--fp-text); }
+  .nav-links a.active { color: var(--fp-text); }
+  .nav-cta {
+    background: var(--fp-orange) !important; color: var(--fp-cream) !important;
+    padding: 8px 20px; border-radius: 8px; font-weight: 600 !important;
+    font-size: 13px !important; transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.9; }
+
+  /* ===== PAGE HERO ===== */
+  .page-hero {
+    padding: 160px 24px 80px;
+    max-width: 1200px; margin: 0 auto;
+    position: relative;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; top: -200px; left: 50%;
+    transform: translateX(-50%); width: 800px; height: 800px;
+    background: radial-gradient(circle, var(--fp-orange-glow) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .page-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .page-hero h1 .fp-dot { color: var(--fp-orange); }
+  .page-hero .intro {
+    font-size: 18px;
+    color: var(--fp-text-secondary);
+    max-width: 640px;
+    line-height: 1.8;
+    position: relative;
+  }
+  .page-hero .intro em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--fp-text);
+  }
+
+  /* ===== FOUNDERS GRID ===== */
+  .founders-container {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+  .founder-card {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+    padding: 56px 0;
+    border-bottom: 1px solid var(--fp-dark-border);
+    align-items: start;
+  }
+  .founder-card:first-child {
+    border-top: 1px solid var(--fp-dark-border);
+  }
+  .founder-card:last-child {
+    border-bottom: none;
+  }
+
+  .founder-avatar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .founder-avatar {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--fp-dark-border);
+    transition: border-color 0.3s ease;
+    flex-shrink: 0;
+  }
+  .founder-avatar:hover {
+    border-color: var(--fp-orange);
+  }
+  .founder-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .presence-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: var(--fp-dark-elevated);
+    border: 1px solid var(--fp-dark-border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--fp-text-tertiary);
+    letter-spacing: 0.5px;
+  }
+  .presence-tag .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--fp-orange);
+  }
+
+  .founder-info {}
+  .founder-nickname {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--fp-orange);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .founder-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--fp-text);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .founder-title {
+    font-size: 15px;
+    color: var(--fp-text-secondary);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .founder-bio {
+    font-size: 16px;
+    color: var(--fp-text-secondary);
+    line-height: 1.85;
+    margin-bottom: 24px;
+    max-width: 600px;
+  }
+  .founder-social {
+    display: flex;
+    gap: 20px;
+  }
+  .founder-social a {
+    font-size: 13px;
+    color: var(--fp-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .founder-social a:hover { opacity: 0.7; }
+
+  /* ===== BESTIES SECTION ===== */
+  .besties-section {
+    background: var(--fp-dark-elevated);
+    padding: 80px 24px;
+  }
+  .besties-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .besties-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--fp-orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+  .besties-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .besties-title .fp-dot { color: var(--fp-orange); }
+  .besties-desc {
+    font-size: 15px;
+    color: var(--fp-text-secondary);
+    margin-bottom: 48px;
+    max-width: 560px;
+    line-height: 1.7;
+  }
+  .besties-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .bestie-card {
+    background: var(--fp-dark-card);
+    border: 1px solid var(--fp-dark-border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s ease;
+  }
+  .bestie-card:hover {
+    border-color: var(--fp-orange);
+    transform: translateY(-2px);
+  }
+  .bestie-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .bestie-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--fp-dark-elevated);
+    border: 1px solid var(--fp-dark-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    color: var(--fp-text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+  .bestie-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--fp-text);
+    line-height: 1.3;
+  }
+  .bestie-role {
+    font-size: 13px;
+    color: var(--fp-text-tertiary);
+    line-height: 1.5;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center; padding: 48px 24px;
+    border-top: 1px solid var(--fp-dark-border);
+  }
+  .footer-logo { margin-bottom: 16px; }
+  .footer-logo svg { height: 20px; }
+  .footer-tagline {
+    font-size: 13px; color: var(--fp-text-tertiary);
+    margin-bottom: 24px; font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+  .footer-links {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--fp-text-secondary); text-decoration: none;
+    font-size: 13px; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--fp-orange); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .besties-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .founder-card {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 40px 0;
+    }
+    .founder-avatar-wrapper {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .founder-avatar {
+      width: 100px; height: 100px;
+    }
+    .founder-name { font-size: 28px; }
+    .page-hero { padding: 120px 24px 48px; }
+  }
+  @media (max-width: 560px) {
+    .besties-grid { grid-template-columns: 1fr; }
+    .founder-social { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-mark" height="24" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+        <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+      </svg>
+      <span style="font-weight:700;font-size:16px;color:var(--fp-text);letter-spacing:-0.3px;">podcast<span style="color:var(--fp-orange);">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#episodes">Epizódok</a>
+      <a href="#" class="active">Alapítók</a>
+      <a href="index.html#pillars">Témák</a>
+      <a href="bookshelf.html">Könyvek</a>
+      <a href="shop.html">Shop</a>
+      <a href="index.html#subscribe" class="nav-cta">Feliratkozás</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <h1>Alapitok<span class="fp-dot">.</span></h1>
+  <p class="intro">
+    Negy ember, negy teljesen kulonbozo hatter es perspektiva. Befekteto, vallalkozo, epitesz es gondolkodo --
+    akik <em>baratkent ulnek le egy asztalhoz,</em> hogy osszinten beszeljenek arrol, ami szamit.
+    A First Principle Podcast az o beszelgeteseikbol szuletik.
+  </p>
+</div>
+
+<!-- FOUNDERS -->
+<div class="founders-container">
+
+  <!-- Pereczes Jani -->
+  <div class="founder-card">
+    <div class="founder-avatar-wrapper">
+      <div class="founder-avatar"><img src="images/pereczes-janos.jpg" alt="Pereczes János"></div>
+      <div class="presence-tag"><span class="dot"></span> 80-90% jelenlet</div>
+    </div>
+    <div class="founder-info">
+      <div class="founder-nickname">[A Bajnok]</div>
+      <div class="founder-name">Pereczes Jani</div>
+      <div class="founder-title">CEO, 1337 Partners &middot; AI stratega &middot; Az Epitesi Naplo szerzoje</div>
+      <div class="founder-bio">
+        A podcast facilitatora es hajtomotorja. Jani az, aki osszerantja az asztalnal ulokat, felteszi a kerdeseket,
+        es nem hagyja, hogy a beszalgetes felszines maradjon. Az 1337 Partners CEO-jakent a magyar vallalatok
+        AI transzformaciojat segiti, az Epitesi Naplo blogon pedig heti rendszeresseggel osztja meg gondolatait
+        a jovorol, technologiarol es a vezetesrol. A First Principle Podcast nelkule nem letezne.
+      </div>
+      <div class="founder-social">
+        <a href="#">LinkedIn &rarr;</a>
+        <a href="#">X (Twitter) &rarr;</a>
+        <a href="#">Epitesi Naplo &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gaal Norbert -->
+  <div class="founder-card">
+    <div class="founder-avatar-wrapper">
+      <div class="founder-avatar"><img src="images/gaal-norbert.jpg" alt="Gaál Norbert"></div>
+      <div class="presence-tag"><span class="dot"></span> 60-70% jelenlet</div>
+    </div>
+    <div class="founder-info">
+      <div class="founder-nickname">[A Befekteto]</div>
+      <div class="founder-name">Gaal Norbert</div>
+      <div class="founder-title">Befekteto &middot; Stratega &middot; Mediaszakerto</div>
+      <div class="founder-bio">
+        A penz es a piacok logikaját hozza az asztalra. Norbi befektetoi hatterrel es
+        media-tapasztalattal rendelkezik -- a podcast strategiai iranyanak orzoje es egyik fo
+        meghatarozoja. Amikor a piaci trendekrol, tokeallokaciorol vagy a media jovojerol esik szo,
+        o az, aki a szamokat es a nagy kepet osszekoti. A podcast strategiai iranytuje.
+      </div>
+      <div class="founder-social">
+        <a href="#">LinkedIn &rarr;</a>
+        <a href="#">X (Twitter) &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toreky Bence -->
+  <div class="founder-card">
+    <div class="founder-avatar-wrapper">
+      <div class="founder-avatar"><img src="images/toreky-bence.png" alt="Töreky Bence"></div>
+      <div class="presence-tag"><span class="dot"></span> 40-50% jelenlet</div>
+    </div>
+    <div class="founder-info">
+      <div class="founder-nickname">[Az Epito]</div>
+      <div class="founder-name">Toreky Bence</div>
+      <div class="founder-title">Startup epito &middot; Fintech tanacsado &middot; Tickething alapito &middot; OXO Technologies befektetesi igazgato</div>
+      <div class="founder-bio">
+        A technikai melyseg es pragmatizmus hangja. Bence a Tickething alapitoja, az OXO Technologies
+        befektetesi igazgatoja, aki a CEE tech okoszisztemaban szerzett melyrehat tapasztalatot.
+        Amikor a tobbiek a nagy viziorol beszelnek, Bence az, aki megkerdezi: "De hogyan?"
+        A startup-epites realitasat es a fintech vilag mukodeslogikajat hozza a beszelgetesekbe.
+      </div>
+      <div class="founder-social">
+        <a href="#">LinkedIn &rarr;</a>
+        <a href="#">X (Twitter) &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acs Zoltan -->
+  <div class="founder-card">
+    <div class="founder-avatar-wrapper">
+      <div class="founder-avatar"><img src="images/acs-zoltan.jpg" alt="Ács Zoltán"></div>
+      <div class="presence-tag"><span class="dot"></span> 40-50% jelenlet</div>
+    </div>
+    <div class="founder-info">
+      <div class="founder-nickname">[A Gondolkodo]</div>
+      <div class="founder-name">Acs Zoltan</div>
+      <div class="founder-title">Kozeleti gondolkodo &middot; Intezmenyepito</div>
+      <div class="founder-bio">
+        A tarsadalom, politika es rendszerszintu kerdesek szakertoje. Zoli az, aki a legnagyobb
+        kerdeseket teszi fel: milyen orszagot akarunk? Hogyan epulnek mukodo intezmenyek?
+        Mi a szerepe a civil tarsadalomnak? Amikor megszolal, mindenki figyel -- es mindig melyre megy.
+        A hallgatok egyontetuen azt mondjak: o az, akire erdemes kulon odafigyelni.
+      </div>
+      <div class="founder-social">
+        <a href="#">LinkedIn &rarr;</a>
+        <a href="#">X (Twitter) &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BESTIES SECTION -->
+<section class="besties-section">
+  <div class="besties-inner">
+    <div class="besties-label">A Besties</div>
+    <h2 class="besties-title"><span class="serif-italic">A tágabb kör</span><span class="fp-dot">.</span></h2>
+    <p class="besties-desc">
+      A First Principle Podcast nem csak négy emberről szól. Van egy tágabb kör -- a "Besties" --
+      akik rendszeresen visszatérő vendégként gazdagítják a beszélgetéseket.
+    </p>
+
+    <div class="besties-grid">
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">BA</div>
+          <div class="bestie-name">Banai Adam</div>
+        </div>
+        <div class="bestie-role">MNB ugyvezeto igazgato, fokozgazdasz</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">KK</div>
+          <div class="bestie-name">Dr. Kaiser Kristof</div>
+        </div>
+        <div class="bestie-role">Kaiser & Pilisi tarsalapito, ESOP expert</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">FP</div>
+          <div class="bestie-name">Faykiss Peter</div>
+        </div>
+        <div class="bestie-role">HOLD Alapkezelo, ex-MNB digitalizacios igazgato</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">PP</div>
+          <div class="bestie-name">Palasics Peter</div>
+        </div>
+        <div class="bestie-role">Milestone Institute CEO, Magyar Fintech Szovetseg elnok</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">SR</div>
+          <div class="bestie-name">Szmola Roland</div>
+        </div>
+        <div class="bestie-role">Methodology Architects alapito, agilis transzformacio</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">FB</div>
+          <div class="bestie-name">Fischer Balint</div>
+        </div>
+        <div class="bestie-role">Dorsum, wealthtech, FP Innovation</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">SA</div>
+          <div class="bestie-name">Sebestyen Andris</div>
+        </div>
+        <div class="bestie-role">GRANTIS alapito es CEO</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">SD</div>
+          <div class="bestie-name">Simonyi Denes</div>
+        </div>
+        <div class="bestie-role">Social Capital Tech partner, digitalis transzformacio</div>
+      </div>
+
+      <div class="bestie-card">
+        <div class="bestie-top">
+          <div class="bestie-avatar">KM</div>
+          <div class="bestie-name">Kiraly Mate</div>
+        </div>
+        <div class="bestie-role">Neatly/Textiltech alapito, sorozatvallalkozo</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="footer-logo">
+      <svg height="20" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+        <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+      </svg>
+    </div>
+    <p class="footer-tagline">A jovo Magyarorszagat formalo gondolkodok beszelgetese.</p>
+    <div class="footer-links">
+      <a href="#">YouTube</a><a href="#">Spotify</a><a href="#">Apple Podcasts</a>
+      <a href="#">LinkedIn</a><a href="#">Substack</a><a href="#">First Principle Club</a>
+    </div>
+    <p style="font-size:11px;color:var(--fp-text-tertiary);margin-top:24px;">&copy; 2027 first principle. podcast &middot; A First Principle Club mediaprojektje</p>
+  </div>
+</footer>
+
+</body>
+</html>

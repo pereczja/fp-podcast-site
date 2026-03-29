@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — First Principle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --orange: #FF5800;
+      --cream: #FFFFF0;
+      --dark: #100C08;
+      --dark-elevated: #1a1612;
+      --dark-card: #211d18;
+      --dark-border: #302a22;
+      --text-secondary: #b8a88a;
+      --text-tertiary: #7a6d5c;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark);
+      color: var(--cream);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(16, 12, 8, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--cream);
+    }
+
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--cream);
+    }
+
+    .nav-links a.active {
+      color: var(--orange);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 160px 2rem 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 .dot {
+      color: var(--orange);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    /* PRODUCT GRID */
+    .products {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 580px) {
+      .products {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+      }
+    }
+
+    .product-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: #4a3f32;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    /* PRODUCT IMAGE AREA */
+    .product-image {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-image .mockup-label {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 240, 0.25);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      bottom: 12px;
+      right: 14px;
+    }
+
+    /* ===================== */
+    /* CSS MERCH MOCKUPS     */
+    /* ===================== */
+
+    /* --- T-SHIRT SHAPE (shared) --- */
+    .css-tshirt {
+      position: relative;
+      width: 180px;
+      height: 190px;
+    }
+
+    .css-tshirt .tshirt-body {
+      position: absolute;
+      bottom: 0;
+      left: 30px;
+      width: 120px;
+      height: 140px;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .css-tshirt .tshirt-top {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      width: 120px;
+      height: 40px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .css-tshirt .tshirt-neck {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 20px;
+      border-radius: 0 0 18px 18px;
+      z-index: 2;
+    }
+
+    .css-tshirt .tshirt-sleeve-left {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 38px;
+      height: 55px;
+      border-radius: 8px 0 12px 8px;
+      transform: rotate(-8deg);
+      transform-origin: top right;
+    }
+
+    .css-tshirt .tshirt-sleeve-right {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      width: 38px;
+      height: 55px;
+      border-radius: 0 8px 8px 12px;
+      transform: rotate(8deg);
+      transform-origin: top left;
+    }
+
+    .css-tshirt .tshirt-logo {
+      position: absolute;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 3;
+    }
+
+    .css-tshirt .tshirt-logo svg {
+      width: 52px;
+      height: auto;
+    }
+
+    .css-tshirt .tshirt-logo-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    /* Classic Tee - Black */
+    .mockup-classic-tee {
+      background: linear-gradient(160deg, #1a1a1a 0%, #0e0e0e 100%);
+    }
+    .mockup-classic-tee .tshirt-body,
+    .mockup-classic-tee .tshirt-top,
+    .mockup-classic-tee .tshirt-sleeve-left,
+    .mockup-classic-tee .tshirt-sleeve-right {
+      background: #111;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+    .mockup-classic-tee .tshirt-neck {
+      background: #0e0e0e;
+    }
+    .mockup-classic-tee .tshirt-logo-text {
+      color: rgba(255, 255, 240, 0.85);
+    }
+
+    /* Logo Tee - White */
+    .mockup-logo-tee {
+      background: linear-gradient(160deg, #f5f5ea 0%, #e8e8d8 100%);
+    }
+    .mockup-logo-tee .tshirt-body,
+    .mockup-logo-tee .tshirt-top,
+    .mockup-logo-tee .tshirt-sleeve-left,
+    .mockup-logo-tee .tshirt-sleeve-right {
+      background: #f0f0e5;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+    }
+    .mockup-logo-tee .tshirt-neck {
+      background: #e8e8d8;
+    }
+    .mockup-logo-tee .tshirt-logo svg {
+      width: 64px;
+    }
+    .mockup-logo-tee .tshirt-logo-text {
+      color: #1a1a1a;
+    }
+
+    /* --- POLO SHAPE --- */
+    .css-polo {
+      position: relative;
+      width: 180px;
+      height: 190px;
+    }
+
+    .css-polo .polo-body {
+      position: absolute;
+      bottom: 0;
+      left: 30px;
+      width: 120px;
+      height: 140px;
+      background: #1a1a3e;
+      border-radius: 0 0 12px 12px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .css-polo .polo-top {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      width: 120px;
+      height: 40px;
+      background: #1a1a3e;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .css-polo .polo-sleeve-left {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 38px;
+      height: 50px;
+      background: #1a1a3e;
+      border-radius: 8px 0 12px 8px;
+      transform: rotate(-8deg);
+      transform-origin: top right;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .css-polo .polo-sleeve-right {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      width: 38px;
+      height: 50px;
+      background: #1a1a3e;
+      border-radius: 0 8px 8px 12px;
+      transform: rotate(8deg);
+      transform-origin: top left;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .css-polo .polo-collar {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 22px;
+      border: 2.5px solid rgba(255,255,240,0.15);
+      border-bottom: none;
+      border-radius: 30px 30px 0 0;
+      z-index: 2;
+    }
+
+    .css-polo .polo-collar::before,
+    .css-polo .polo-collar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 20px;
+      height: 14px;
+      background: #1a1a3e;
+      border: 2px solid rgba(255,255,240,0.12);
+      border-bottom: none;
+    }
+    .css-polo .polo-collar::before {
+      left: 4px;
+      transform: rotate(-15deg);
+      border-radius: 6px 0 0 0;
+      transform-origin: bottom right;
+    }
+    .css-polo .polo-collar::after {
+      right: 4px;
+      transform: rotate(15deg);
+      border-radius: 0 6px 0 0;
+      transform-origin: bottom left;
+    }
+
+    .css-polo .polo-button-line {
+      position: absolute;
+      top: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1.5px;
+      height: 30px;
+      background: rgba(255,255,240,0.08);
+      z-index: 2;
+    }
+
+    .css-polo .polo-logo {
+      position: absolute;
+      top: 75px;
+      left: 50px;
+      z-index: 3;
+    }
+
+    .css-polo .polo-logo svg {
+      width: 30px;
+      height: auto;
+    }
+
+    .mockup-polo {
+      background: linear-gradient(160deg, #1a2332 0%, #0f1620 100%);
+    }
+
+    /* --- DAD CAP SHAPE --- */
+    .css-cap {
+      position: relative;
+      width: 160px;
+      height: 130px;
+    }
+
+    .css-cap .cap-crown {
+      position: absolute;
+      top: 0;
+      left: 20px;
+      width: 120px;
+      height: 80px;
+      background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+      border-radius: 60px 60px 0 0;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+
+    .css-cap .cap-crown::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 100%;
+      background: rgba(255,255,240,0.04);
+    }
+
+    .css-cap .cap-panel-left {
+      position: absolute;
+      top: 0;
+      left: 20px;
+      width: 60px;
+      height: 80px;
+      border-radius: 60px 0 0 0;
+      border-right: 1px solid rgba(255,255,240,0.04);
+    }
+
+    .css-cap .cap-brim {
+      position: absolute;
+      top: 72px;
+      left: 5px;
+      width: 150px;
+      height: 22px;
+      background: linear-gradient(180deg, #1e1e1e 0%, #141414 100%);
+      border-radius: 0 0 80px 80px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    }
+
+    .css-cap .cap-brim::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      height: 2px;
+      background: rgba(255,255,240,0.06);
+      border-radius: 1px;
+    }
+
+    .css-cap .cap-strap {
+      position: absolute;
+      top: 75px;
+      right: 18px;
+      width: 20px;
+      height: 8px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      border: 1px solid rgba(255,255,240,0.05);
+    }
+
+    .css-cap .cap-logo {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+
+    .css-cap .cap-logo svg {
+      width: 44px;
+      height: auto;
+    }
+
+    .mockup-cap {
+      background: linear-gradient(160deg, #141414 0%, #0a0a0a 100%);
+    }
+
+    /* --- HOODIE SHAPE --- */
+    .css-hoodie {
+      position: relative;
+      width: 200px;
+      height: 210px;
+    }
+
+    .css-hoodie .hoodie-body {
+      position: absolute;
+      bottom: 0;
+      left: 30px;
+      width: 140px;
+      height: 160px;
+      background: #2a2a2a;
+      border-radius: 0 0 14px 14px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .css-hoodie .hoodie-top {
+      position: absolute;
+      top: 28px;
+      left: 30px;
+      width: 140px;
+      height: 40px;
+      background: #2a2a2a;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .css-hoodie .hoodie-sleeve-left {
+      position: absolute;
+      top: 28px;
+      left: 0;
+      width: 40px;
+      height: 70px;
+      background: #2a2a2a;
+      border-radius: 8px 0 12px 8px;
+      transform: rotate(-8deg);
+      transform-origin: top right;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .css-hoodie .hoodie-sleeve-right {
+      position: absolute;
+      top: 28px;
+      right: 0;
+      width: 40px;
+      height: 70px;
+      background: #2a2a2a;
+      border-radius: 0 8px 8px 12px;
+      transform: rotate(8deg);
+      transform-origin: top left;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .css-hoodie .hoodie-hood {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 38px;
+      border: 3px solid rgba(255,255,240,0.08);
+      border-bottom: none;
+      border-radius: 40px 40px 0 0;
+      z-index: 2;
+    }
+
+    .css-hoodie .hoodie-hood::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 6px;
+      background: rgba(255,255,240,0.05);
+      border-radius: 0 0 6px 6px;
+    }
+
+    .css-hoodie .hoodie-pocket {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 1px;
+      background: rgba(255,255,240,0.06);
+    }
+
+    .css-hoodie .hoodie-string-left,
+    .css-hoodie .hoodie-string-right {
+      position: absolute;
+      top: 36px;
+      width: 1.5px;
+      height: 20px;
+      background: rgba(255,255,240,0.1);
+      z-index: 3;
+    }
+    .css-hoodie .hoodie-string-left { left: 86px; }
+    .css-hoodie .hoodie-string-right { right: 86px; }
+
+    .css-hoodie .hoodie-logo {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 3;
+    }
+
+    .css-hoodie .hoodie-logo svg {
+      width: 60px;
+      height: auto;
+    }
+
+    .mockup-hoodie {
+      background: linear-gradient(160deg, #1e1e1e 0%, #121212 100%);
+    }
+
+    /* --- MUG SHAPE --- */
+    .css-mug {
+      position: relative;
+      width: 150px;
+      height: 130px;
+    }
+
+    .css-mug .mug-body {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      width: 100px;
+      height: 110px;
+      background: linear-gradient(160deg, #f5f5f0 0%, #e8e8e0 100%);
+      border-radius: 6px 6px 14px 14px;
+      box-shadow: inset -8px 0 16px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .css-mug .mug-body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(180deg, #e0e0d5 0%, #eeeee4 100%);
+      border-radius: 6px 6px 0 0;
+    }
+
+    .css-mug .mug-handle {
+      position: absolute;
+      top: 30px;
+      right: 4px;
+      width: 28px;
+      height: 50px;
+      border: 5px solid #e0e0d5;
+      border-left: none;
+      border-radius: 0 20px 20px 0;
+    }
+
+    .css-mug .mug-logo {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      z-index: 3;
+    }
+
+    .css-mug .mug-logo svg {
+      width: 42px;
+      height: auto;
+    }
+
+    .css-mug .mug-logo-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.4rem;
+      color: #1a1a1a;
+      opacity: 0.5;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .mockup-mug {
+      background: linear-gradient(160deg, #f0f0e0 0%, #ddddd0 100%);
+    }
+
+    /* PRODUCT INFO */
+    .product-info {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .product-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+
+    .product-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+
+    .product-price span {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      margin-left: 2px;
+    }
+
+    .btn-order {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--orange);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-order:hover {
+      background: #e64f00;
+      transform: translateY(-1px);
+    }
+
+    .btn-order:active {
+      transform: translateY(0);
+    }
+
+    .btn-order svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--dark-border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .footer-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .footer-text {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--cream);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <svg height="24" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+          <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+        </svg>
+        <span class="nav-logo-text">First Principle</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Epizódok</a></li>
+        <li><a href="about.html">Rólunk</a></li>
+        <li><a href="bookshelf.html">Könyvek</a></li>
+        <li><a href="#" class="active">Shop</a></li>
+        <li><a href="#">Feliratkozás</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Shop<span class="dot">.</span></h1>
+    <p>Viseld a first principle gondolkodást.</p>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products">
+
+    <!-- 1. FP Classic Tee -->
+    <div class="product-card">
+      <div class="product-image mockup-classic-tee">
+        <div class="css-tshirt">
+          <div class="tshirt-sleeve-left"></div>
+          <div class="tshirt-sleeve-right"></div>
+          <div class="tshirt-top"></div>
+          <div class="tshirt-body"></div>
+          <div class="tshirt-neck"></div>
+          <div class="tshirt-logo">
+            <svg viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+              <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+            </svg>
+            <span class="tshirt-logo-text">first principle.</span>
+          </div>
+        </div>
+        <span class="mockup-label">FP Apparel</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">FP Classic Tee</div>
+        <div class="product-desc">Fekete póló, fehér "first principle." logóval a mellkason. Unisex.</div>
+        <div class="product-bottom">
+          <div class="product-price">9 900 <span>HUF</span></div>
+          <a href="#" class="btn-order">
+            Megrendelem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. FP Logo Tee — Narancs -->
+    <div class="product-card">
+      <div class="product-image mockup-logo-tee">
+        <div class="css-tshirt">
+          <div class="tshirt-sleeve-left"></div>
+          <div class="tshirt-sleeve-right"></div>
+          <div class="tshirt-top"></div>
+          <div class="tshirt-body"></div>
+          <div class="tshirt-neck"></div>
+          <div class="tshirt-logo">
+            <svg viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+              <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+            </svg>
+            <span class="tshirt-logo-text">first principle.</span>
+          </div>
+        </div>
+        <span class="mockup-label" style="color: rgba(16,12,8,0.2);">FP Apparel</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">FP Logo Tee — Narancs</div>
+        <div class="product-desc">Fehér póló, narancssárga logómark a mellkason.</div>
+        <div class="product-bottom">
+          <div class="product-price">9 900 <span>HUF</span></div>
+          <a href="#" class="btn-order">
+            Megrendelem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. FP Polo -->
+    <div class="product-card">
+      <div class="product-image mockup-polo">
+        <div class="css-polo">
+          <div class="polo-sleeve-left"></div>
+          <div class="polo-sleeve-right"></div>
+          <div class="polo-top"></div>
+          <div class="polo-body"></div>
+          <div class="polo-collar"></div>
+          <div class="polo-button-line"></div>
+          <div class="polo-logo">
+            <svg viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+              <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+            </svg>
+          </div>
+        </div>
+        <span class="mockup-label">FP Apparel</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">FP Polo</div>
+        <div class="product-desc">Sötétkék galléros póló, kis narancssárga logómark. Prémium piqué anyag.</div>
+        <div class="product-bottom">
+          <div class="product-price">14 900 <span>HUF</span></div>
+          <a href="#" class="btn-order">
+            Megrendelem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. FP Dad Cap -->
+    <div class="product-card">
+      <div class="product-image mockup-cap">
+        <div class="css-cap">
+          <div class="cap-crown"></div>
+          <div class="cap-brim"></div>
+          <div class="cap-strap"></div>
+          <div class="cap-logo">
+            <svg viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+              <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+            </svg>
+          </div>
+        </div>
+        <span class="mockup-label">FP Apparel</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">FP Dad Cap</div>
+        <div class="product-desc">Fekete baseball sapka, narancssárga logómark hímzéssel. Állítható.</div>
+        <div class="product-bottom">
+          <div class="product-price">7 900 <span>HUF</span></div>
+          <a href="#" class="btn-order">
+            Megrendelem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. FP Hoodie -->
+    <div class="product-card">
+      <div class="product-image mockup-hoodie">
+        <div class="css-hoodie">
+          <div class="hoodie-sleeve-left"></div>
+          <div class="hoodie-sleeve-right"></div>
+          <div class="hoodie-top"></div>
+          <div class="hoodie-body"></div>
+          <div class="hoodie-hood"></div>
+          <div class="hoodie-string-left"></div>
+          <div class="hoodie-string-right"></div>
+          <div class="hoodie-pocket"></div>
+          <div class="hoodie-logo">
+            <svg viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+              <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+            </svg>
+          </div>
+        </div>
+        <span class="mockup-label">FP Apparel</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">FP Hoodie</div>
+        <div class="product-desc">Fekete kapucnis pulóver, "first principle." felirattal a hátán, kis logómark a mellkason.</div>
+        <div class="product-bottom">
+          <div class="product-price">16 900 <span>HUF</span></div>
+          <a href="#" class="btn-order">
+            Megrendelem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. FP Mug -->
+    <div class="product-card">
+      <div class="product-image mockup-mug">
+        <div class="css-mug">
+          <div class="mug-body"></div>
+          <div class="mug-handle"></div>
+          <div class="mug-logo">
+            <svg viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+              <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+            </svg>
+            <span class="mug-logo-text">first principle.</span>
+          </div>
+        </div>
+        <span class="mockup-label" style="color: rgba(16,12,8,0.2);">FP Goods</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">FP Mug</div>
+        <div class="product-desc">Fehér kerámia bögre, narancssárga logómarkkal. "Gondolkodj elsőelvekből." felirat.</div>
+        <div class="product-bottom">
+          <div class="product-price">4 900 <span>HUF</span></div>
+          <a href="#" class="btn-order">
+            Megrendelem
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg height="18" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+          <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+        </svg>
+        <span class="footer-logo-text">First Principle</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#">Spotify</a></li>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">Apple Podcasts</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+      <p class="footer-text">&copy; 2026 First Principle Podcast. Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
