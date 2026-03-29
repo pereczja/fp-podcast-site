@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belső Stratégia — first principle. podcast</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --fp-orange: #FF5800;
+    --fp-orange-dim: rgba(255, 88, 0, 0.12);
+    --fp-orange-glow: rgba(255, 88, 0, 0.06);
+    --fp-cream: #FFFFF0;
+    --fp-cream-dark: #F5F0E0;
+    --fp-dark: #100C08;
+    --fp-dark-elevated: #1a1612;
+    --fp-dark-card: #211d18;
+    --fp-dark-border: #302a22;
+    --fp-text: #FFFFF0;
+    --fp-text-secondary: #b8a88a;
+    --fp-text-tertiary: #7a6d5c;
+    --fp-purple: #2d1854;
+    --green: #4dbe6e;
+    --blue: #4d8be5;
+    --teal: #14b8a6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--fp-dark);
+    color: var(--fp-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .serif { font-family: 'Playfair Display', Georgia, serif; }
+  .serif-italic { font-family: 'Playfair Display', Georgia, serif; font-style: italic; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(16, 12, 8, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--fp-dark-border);
+    padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-mark { height: 28px; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    color: var(--fp-text-secondary); text-decoration: none;
+    font-size: 14px; font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--fp-text); }
+  .nav-links a.active { color: var(--fp-text); }
+  .nav-cta {
+    background: var(--fp-orange) !important; color: var(--fp-cream) !important;
+    padding: 8px 20px; border-radius: 8px; font-weight: 600 !important;
+    font-size: 13px !important; transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.9; }
+
+  /* ===== PAGE HERO ===== */
+  .page-hero {
+    padding: 140px 24px 64px;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .page-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .fp-dot { color: var(--fp-orange); }
+  .page-hero .subtitle {
+    font-size: 18px;
+    color: var(--fp-text-secondary);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 20px;
+  }
+  .internal-badge {
+    display: inline-block;
+    background: var(--fp-orange);
+    color: var(--fp-cream);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 700;
+    margin-bottom: 40px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--fp-dark-border);
+  }
+  .section-title .fp-dot { color: var(--fp-orange); }
+
+  /* ===== PERSONA CARDS ===== */
+  .persona-card {
+    background: var(--fp-dark-card);
+    border: 1px solid var(--fp-dark-border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-card:hover {
+    border-color: rgba(255, 88, 0, 0.3);
+  }
+  .persona-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--fp-orange);
+    border-radius: 4px 0 0 4px;
+  }
+  .persona-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .persona-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .persona-meta {
+    font-size: 14px;
+    color: var(--fp-orange);
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .persona-subtitle {
+    font-size: 15px;
+    color: var(--fp-text-secondary);
+    font-style: italic;
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+  }
+  .priority-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--fp-orange-dim);
+    color: var(--fp-orange);
+    border: 1px solid rgba(255, 88, 0, 0.25);
+  }
+  .persona-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .tag {
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: var(--fp-dark);
+    border: 1px solid var(--fp-dark-border);
+    color: var(--fp-text-secondary);
+  }
+  .persona-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .persona-field {
+    background: var(--fp-dark);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--fp-dark-border);
+  }
+  .persona-field-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fp-text-tertiary);
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .persona-field-value {
+    font-size: 14px;
+    color: var(--fp-text-secondary);
+    line-height: 1.6;
+  }
+  .key-insight {
+    background: var(--fp-orange-dim);
+    border: 1px solid rgba(255, 88, 0, 0.2);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .key-insight .persona-field-label {
+    color: var(--fp-orange);
+  }
+  .key-insight .persona-field-value {
+    color: var(--fp-text);
+    font-weight: 500;
+  }
+  .topics-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .topic-item {
+    font-size: 13px;
+    color: var(--fp-text-secondary);
+  }
+  .conversion-path {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--fp-text-secondary);
+    line-height: 1.8;
+  }
+  .conversion-path .arrow {
+    color: var(--fp-orange);
+    margin: 0 4px;
+  }
+  .persona-warning {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #f59e0b;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+
+  /* ===== STRATEGY TABLE ===== */
+  .strategy-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--fp-dark-border);
+  }
+  .strategy-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 700px;
+  }
+  .strategy-table th {
+    background: var(--fp-dark-elevated);
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fp-text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    border-bottom: 1px solid var(--fp-dark-border);
+  }
+  .strategy-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--fp-dark-border);
+    color: var(--fp-text-secondary);
+    vertical-align: middle;
+  }
+  .strategy-table tr:last-child td {
+    border-bottom: none;
+  }
+  .strategy-table tr:hover td {
+    background: rgba(255, 88, 0, 0.03);
+  }
+  .strategy-table td:first-child {
+    font-weight: 600;
+    color: var(--fp-text);
+  }
+  .strategy-table .priority-stars {
+    color: var(--fp-orange);
+    letter-spacing: 2px;
+  }
+
+  /* ===== RECOMMENDATION CARDS ===== */
+  .rec-cards {
+    display: grid;
+    gap: 20px;
+  }
+  .rec-card {
+    background: var(--fp-dark-card);
+    border: 1px solid var(--fp-dark-border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+  .rec-card:hover {
+    border-color: rgba(255, 88, 0, 0.3);
+  }
+  .rec-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--fp-orange-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--fp-orange);
+    flex-shrink: 0;
+  }
+  .rec-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .rec-desc {
+    font-size: 14px;
+    color: var(--fp-text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ===== HEATMAP TABLE ===== */
+  .heatmap-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--fp-dark-border);
+  }
+  .heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 600px;
+    text-align: center;
+  }
+  .heatmap th {
+    background: var(--fp-dark-elevated);
+    padding: 14px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--fp-text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    border-bottom: 1px solid var(--fp-dark-border);
+  }
+  .heatmap th:first-child {
+    text-align: left;
+    min-width: 120px;
+  }
+  .heatmap td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--fp-dark-border);
+    font-size: 20px;
+  }
+  .heatmap tr:last-child td {
+    border-bottom: none;
+  }
+  .heatmap td:first-child {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fp-text);
+  }
+  .heatmap .cell-high {
+    background: rgba(77, 190, 110, 0.1);
+  }
+  .heatmap .cell-mid {
+    background: rgba(245, 158, 11, 0.08);
+  }
+  .heatmap .cell-low {
+    background: rgba(122, 109, 92, 0.06);
+  }
+  .heatmap tr:hover td {
+    background: rgba(255, 88, 0, 0.04);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center; padding: 48px 24px;
+    border-top: 1px solid var(--fp-dark-border);
+  }
+  .footer-logo { margin-bottom: 16px; }
+  .footer-logo svg { height: 20px; }
+  .footer-tagline {
+    font-size: 13px; color: var(--fp-text-tertiary);
+    margin-bottom: 24px; font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+  .footer-links {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--fp-text-secondary); text-decoration: none;
+    font-size: 13px; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--fp-orange); }
+  .footer-internal {
+    margin-top: 24px;
+    padding: 10px 20px;
+    background: rgba(255, 88, 0, 0.06);
+    border: 1px solid rgba(255, 88, 0, 0.15);
+    border-radius: 8px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--fp-orange);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .page-hero { padding: 120px 24px 48px; }
+    .persona-grid { grid-template-columns: 1fr; }
+    .persona-header { flex-direction: column; }
+    .rec-card { grid-template-columns: 40px 1fr; gap: 14px; padding: 20px 24px; }
+    .rec-number { width: 40px; height: 40px; font-size: 18px; }
+  }
+  @media (max-width: 560px) {
+    .section { padding: 40px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-mark" height="24" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+        <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+      </svg>
+      <span style="font-weight:700;font-size:16px;color:var(--fp-text);letter-spacing:-0.3px;">podcast<span style="color:var(--fp-orange);">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#episodes">Epizodok</a>
+      <a href="about.html">Alapitok</a>
+      <a href="index.html#pillars">Temak</a>
+      <a href="bookshelf.html">Konyvek</a>
+      <a href="shop.html">Shop</a>
+      <a href="#" class="active">Strategia</a>
+      <a href="index.html#subscribe" class="nav-cta">Feliratkozas</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="internal-badge">&#128274; INTERNAL</div>
+  <h1 style="margin-top:24px;">Belso Strategia<span class="fp-dot">.</span></h1>
+  <p class="subtitle">Csak a mag szamara &mdash; nem publikus</p>
+</div>
+
+<!-- SECTION 1: PERSONAS -->
+<div class="section">
+  <h2 class="section-title">Celzott personak &mdash; prioritas sorrendben<span class="fp-dot">.</span></h2>
+
+  <!-- Persona #1: David -->
+  <div class="persona-card">
+    <div class="persona-header">
+      <div>
+        <div class="persona-name">#1 &ldquo;David, a hazatero&rdquo;</div>
+        <div class="persona-meta">31 ev &middot; product manager</div>
+      </div>
+      <div class="priority-badge">&#129351; #1</div>
+    </div>
+    <div class="persona-subtitle">&ldquo;Nemreg koltozott haza Londonbol. Kozosseget keres.&rdquo;</div>
+    <div class="persona-tags">
+      <span class="tag">LinkedIn</span>
+      <span class="tag">YouTube</span>
+      <span class="tag">Spotify</span>
+    </div>
+    <div class="key-insight">
+      <div class="persona-field-label">Key Insight</div>
+      <div class="persona-field-value">Ha o beall, hozza a baratait is &mdash; hazateroket, kulfoldieket</div>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-field">
+        <div class="persona-field-label">Frustrations</div>
+        <div class="persona-field-value">Nem talal kozosseget a szintjen, magyar podcast cringe</div>
+      </div>
+      <div class="persona-field">
+        <div class="persona-field-label">Topics that hook</div>
+        <div class="persona-field-value">
+          <div class="topics-row">
+            <span class="topic-item">AI &amp; Tech &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Penzugyek &#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Mo 2035 &#11088;&#11088;&#11088;&#11088;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="persona-field" style="margin-bottom:0;">
+      <div class="persona-field-label">Conversion Path</div>
+      <div class="conversion-path">
+        LinkedIn clip <span class="arrow">&rarr;</span> YouTube epizod <span class="arrow">&rarr;</span> Substack <span class="arrow">&rarr;</span> FPC esemeny <span class="arrow">&rarr;</span> tag
+      </div>
+    </div>
+  </div>
+
+  <!-- Persona #2: Mark -->
+  <div class="persona-card">
+    <div class="persona-header">
+      <div>
+        <div class="persona-name">#2 &ldquo;Mark, az ambiciozus&rdquo;</div>
+        <div class="persona-meta">26 ev &middot; junior VC analyst</div>
+      </div>
+      <div class="priority-badge">&#129352; #2</div>
+    </div>
+    <div class="persona-subtitle">&ldquo;Sajat SaaS-t epit estenkent. A jovo donteshozoja.&rdquo;</div>
+    <div class="persona-tags">
+      <span class="tag">TikTok</span>
+      <span class="tag">Twitter/X</span>
+      <span class="tag">YouTube</span>
+    </div>
+    <div class="key-insight">
+      <div class="persona-field-label">Key Insight</div>
+      <div class="persona-field-value">Ma hallgato, 5 ev mulva alapito, 10 ev mulva donteshozo</div>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-field">
+        <div class="persona-field-label">Frustrations</div>
+        <div class="persona-field-value">Magyar startup okoszisztema zart, nem tud bejutni</div>
+      </div>
+      <div class="persona-field">
+        <div class="persona-field-label">Topics that hook</div>
+        <div class="persona-field-value">
+          <div class="topics-row">
+            <span class="topic-item">AI &amp; Tech &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Penzugyek &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Halozat &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="persona-field" style="margin-bottom:0;">
+      <div class="persona-field-label">Conversion Path</div>
+      <div class="conversion-path">
+        TikTok clip <span class="arrow">&rarr;</span> YouTube <span class="arrow">&rarr;</span> Substack <span class="arrow">&rarr;</span> FPC esemeny
+      </div>
+    </div>
+  </div>
+
+  <!-- Persona #3: Tamas -->
+  <div class="persona-card">
+    <div class="persona-header">
+      <div>
+        <div class="persona-name">#3 &ldquo;Tamas, a videki epito&rdquo;</div>
+        <div class="persona-meta">34 ev &middot; csaladi ceg 2. gen, Debrecen</div>
+      </div>
+      <div class="priority-badge">&#129353; #3</div>
+    </div>
+    <div class="persona-subtitle">&ldquo;Atvenni a csaladi ceget. Budapest nem az o vilaga.&rdquo;</div>
+    <div class="persona-tags">
+      <span class="tag">YouTube</span>
+      <span class="tag">Spotify</span>
+      <span class="tag">Facebook</span>
+    </div>
+    <div class="key-insight">
+      <div class="persona-field-label">Key Insight</div>
+      <div class="persona-field-value">SENKI mas nem szolitja meg &mdash; ha mi igen, a lojalitasa a legerosebb</div>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-field">
+        <div class="persona-field-label">Frustrations</div>
+        <div class="persona-field-value">Budapest-centrikusság, csaladi atadas nehez, KKV AI mas szint</div>
+      </div>
+      <div class="persona-field">
+        <div class="persona-field-label">Topics that hook</div>
+        <div class="persona-field-value">
+          <div class="topics-row">
+            <span class="topic-item">Vezetes &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Mo 2035 &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Penzugyek &#11088;&#11088;&#11088;&#11088;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="persona-field">
+      <div class="persona-field-label">Conversion Path</div>
+      <div class="conversion-path">
+        LinkedIn poszt <span class="arrow">&rarr;</span> YouTube <span class="arrow">&rarr;</span> rendszeres hallgato <span class="arrow">&rarr;</span> FPC videki esemeny
+      </div>
+    </div>
+    <div class="persona-warning">&#9888;&#65039; Ha nincs videki vendeg, 3 epizod utan leall</div>
+  </div>
+
+  <!-- Persona #4: Reka -->
+  <div class="persona-card">
+    <div class="persona-header">
+      <div>
+        <div class="persona-name">#4 &ldquo;Reka, a kozepvezeto&rdquo;</div>
+        <div class="persona-meta">38 ev &middot; HR igazgato</div>
+      </div>
+      <div class="priority-badge">#4</div>
+    </div>
+    <div class="persona-subtitle">&ldquo;AI transzformacio a cegeben. Dontestamogatast keres.&rdquo;</div>
+    <div class="persona-tags">
+      <span class="tag">LinkedIn</span>
+      <span class="tag">Spotify</span>
+      <span class="tag">Facebook</span>
+    </div>
+    <div class="key-insight">
+      <div class="persona-field-label">Key Insight</div>
+      <div class="persona-field-value">A legnagyobb potencialis szegmens &mdash; de a hardest to convert</div>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-field">
+        <div class="persona-field-label">Frustrations</div>
+        <div class="persona-field-value">Ferfi-dominalt, nincs konkret AI utmutato, nincs ido</div>
+      </div>
+      <div class="persona-field">
+        <div class="persona-field-label">Topics that hook</div>
+        <div class="persona-field-value">
+          <div class="topics-row">
+            <span class="topic-item">Vezetes &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">AI &#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Mo 2035 &#11088;&#11088;&#11088;&#11088;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="persona-field">
+      <div class="persona-field-label">Conversion Path</div>
+      <div class="conversion-path">
+        Kollega ajanlas <span class="arrow">&rarr;</span> Spotify <span class="arrow">&rarr;</span> rendszeres hallgato
+      </div>
+    </div>
+    <div class="persona-warning">&#9888;&#65039; Ha nincs noi vendeg, soha nem jon</div>
+  </div>
+
+  <!-- Persona #5: Istvan -->
+  <div class="persona-card">
+    <div class="persona-header">
+      <div>
+        <div class="persona-name">#5 &ldquo;Istvan, a tapasztalt&rdquo;</div>
+        <div class="persona-meta">52 ev &middot; cegalapito / board member</div>
+      </div>
+      <div class="priority-badge">#5</div>
+    </div>
+    <div class="persona-subtitle">&ldquo;Eladta a ceget. Legacy-t keres.&rdquo;</div>
+    <div class="persona-tags">
+      <span class="tag">Email</span>
+      <span class="tag">LinkedIn (ritkan)</span>
+      <span class="tag">Konyvek</span>
+    </div>
+    <div class="key-insight">
+      <div class="persona-field-label">Key Insight</div>
+      <div class="persona-field-value">NEM hallgato &mdash; VENDEG. Ha o ul be, a tobbiek odafigyelnek.</div>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-field">
+        <div class="persona-field-label">Frustrations</div>
+        <div class="persona-field-value">Tapasztalata kihasználatlan, kozelet minosege</div>
+      </div>
+      <div class="persona-field">
+        <div class="persona-field-label">Topics that hook</div>
+        <div class="persona-field-value">
+          <div class="topics-row">
+            <span class="topic-item">Mo 2035 &#11088;&#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Vezetes &#11088;&#11088;&#11088;&#11088;</span>
+            <span class="topic-item">Penzugyek &#11088;&#11088;&#11088;&#11088;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="persona-field" style="margin-bottom:0;">
+      <div class="persona-field-label">Conversion Path</div>
+      <div class="conversion-path">
+        Szemelyes meghivas <span class="arrow">&rarr;</span> vendeg <span class="arrow">&rarr;</span> mentor-tag
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: CHANNELS -->
+<div class="section" style="padding-top:0;">
+  <h2 class="section-title">Hogyan szolitsuk meg oket?<span class="fp-dot">.</span></h2>
+
+  <div class="strategy-table-wrap">
+    <table class="strategy-table">
+      <thead>
+        <tr>
+          <th>Csatorna</th>
+          <th>Kit erunk el</th>
+          <th>Tartalom tipus</th>
+          <th>Prioritas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>YouTube (teljes epizod)</td>
+          <td>David, Mark, Tamas</td>
+          <td>Besties + vendeges</td>
+          <td class="priority-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</td>
+        </tr>
+        <tr>
+          <td>LinkedIn (1-3 perc snippetek)</td>
+          <td>David, Reka, Istvan</td>
+          <td>Gondolat-snippetek, takes</td>
+          <td class="priority-stars">&#11088;&#11088;&#11088;&#11088;&#11088;</td>
+        </tr>
+        <tr>
+          <td>TikTok/Reels (30-90 sec)</td>
+          <td>Mark, David</td>
+          <td>Legjobb pillanatok, vitak</td>
+          <td class="priority-stars">&#11088;&#11088;&#11088;&#11088;</td>
+        </tr>
+        <tr>
+          <td>Spotify (audio)</td>
+          <td>Reka, Tamas</td>
+          <td>Teljes epizod (autoban)</td>
+          <td class="priority-stars">&#11088;&#11088;&#11088;&#11088;</td>
+        </tr>
+        <tr>
+          <td>Substack (irott)</td>
+          <td>David, Istvan, Reka</td>
+          <td>Osszefoglalok, behind the scenes</td>
+          <td class="priority-stars">&#11088;&#11088;&#11088;&#11088;</td>
+        </tr>
+        <tr>
+          <td>Szemelyes ajanlas</td>
+          <td>Istvan, Reka</td>
+          <td>FPC tagok hivjak</td>
+          <td class="priority-stars">&#11088;&#11088;&#11088;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 3: RECOMMENDATIONS -->
+<div class="section" style="padding-top:0;">
+  <h2 class="section-title">5 strategiai javaslat<span class="fp-dot">.</span></h2>
+
+  <div class="rec-cards">
+    <div class="rec-card">
+      <div class="rec-number">1</div>
+      <div>
+        <div class="rec-title">Noi vendegek &mdash; min. 25% Y1-ben</div>
+        <div class="rec-desc">Uzleti dontes, nem PC. A Reka-szegmens a legnagyobb. Ha nem latjak magukat a musorban, soha nem lesznek hallgatok. Ez nem opcionalis &mdash; ez a novekedes egyik fo pillere.</div>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-number">2</div>
+      <div>
+        <div class="rec-title">Videki epizod &mdash; negyedevente</div>
+        <div class="rec-desc">A podcast differencialoja. Senki nem csinalja magyarul. Tamas szegmensének lojalitása a legerosebb, de csak ha latja, hogy ez nem Budapest-buborek.</div>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-number">3</div>
+      <div>
+        <div class="rec-title">Snippet-ek + osszefoglalok</div>
+        <div class="rec-desc">Minden epizodhoz: 3-5 social clip + Substack osszefoglalo. Istvan es Reka konverzioja ezen mulik &mdash; ok nem ulnek le 90 perces epizodra elso alkalommal.</div>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-number">4</div>
+      <div>
+        <div class="rec-title">KKV lens az AI pillerben</div>
+        <div class="rec-desc">&ldquo;Hogyan automatizald 45 fovel&rdquo; > &ldquo;AI ugynokök mindenhol&rdquo;. Tamas es Reka relevancia. A nagy tech narrativak nem szolitjak meg a magyar vallalkozot.</div>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-number">5</div>
+      <div>
+        <div class="rec-title">Hallgatoi kozosseg &mdash; ha beindult</div>
+        <div class="rec-desc">Discord/Telegram. FPC marad zart, de legyen nyitott hallgatoi forum. Mark es David belepoje &mdash; ok kozosseget keresnek, nem csak tartalmat.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: HEATMAP -->
+<div class="section" style="padding-top:0;">
+  <h2 class="section-title">Persona &times; Tema matrix<span class="fp-dot">.</span></h2>
+
+  <div class="heatmap-wrap">
+    <table class="heatmap">
+      <thead>
+        <tr>
+          <th></th>
+          <th>David #1</th>
+          <th>Mark #2</th>
+          <th>Tamas #3</th>
+          <th>Reka #4</th>
+          <th>Istvan #5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI &amp; Tech</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-low">&#9898;</td>
+        </tr>
+        <tr>
+          <td>Penzugyek</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-high">&#128994;</td>
+        </tr>
+        <tr>
+          <td>Vezetes</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+        </tr>
+        <tr>
+          <td>Longevity</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-low">&#9898;</td>
+          <td class="cell-low">&#9898;</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-high">&#128994;</td>
+        </tr>
+        <tr>
+          <td>Mo 2035</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+        </tr>
+        <tr>
+          <td>Kozosseg</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-high">&#128994;</td>
+          <td class="cell-mid">&#128993;</td>
+          <td class="cell-mid">&#128993;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="footer-logo">
+      <svg height="20" viewBox="0 0 103 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6345 3.70312C5.48379 8.41802 0 17.2306 0 27.3239C0 37.4173 5.48379 46.2298 13.6345 50.9447V3.70312Z" fill="#FF5800"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M44.3118 0.0546875C29.2516 0.0546957 17.043 12.2634 17.043 27.3235C17.043 42.3837 29.2516 54.5923 44.3118 54.5923L44.3118 0.0546875Z" fill="#FF5800"/>
+        <circle cx="74.9306" cy="27.3276" r="27.3276" fill="#FF5800"/>
+      </svg>
+    </div>
+    <p class="footer-tagline">A jovo Magyarorszagat formalo gondolkodok beszelgetese.</p>
+    <div class="footer-links">
+      <a href="#">YouTube</a><a href="#">Spotify</a><a href="#">Apple Podcasts</a>
+      <a href="#">LinkedIn</a><a href="#">Substack</a><a href="#">First Principle Club</a>
+    </div>
+    <p style="font-size:11px;color:var(--fp-text-tertiary);margin-top:24px;">&copy; 2027 first principle. podcast &middot; A First Principle Club mediaprojektje</p>
+    <div class="footer-internal">&#128274; Belso dokumentum &mdash; ne oszd meg</div>
+  </div>
+</footer>
+
+</body>
+</html>
